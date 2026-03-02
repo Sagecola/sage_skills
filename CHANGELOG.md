@@ -13,6 +13,12 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 - Marketplace metadata file (`marketplace.json`).
 - Chinese README (`README.zh.md`) for bilingual docs.
 
+## [0.3.0] - 2026-03-02
+
+### Features
+- $daily-journal: skill updates included in this release
+- feat: add personalized writing style learning to diary generation skill
+
 ## [0.2.0] - 2026-03-02
 
 ### Features

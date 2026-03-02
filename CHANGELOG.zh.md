@@ -13,6 +13,12 @@
 - marketplace 元数据文件（`marketplace.json`）。
 - 中文 README（`README.zh.md`），补齐双语文档。
 
+## [0.3.0] - 2026-03-02
+
+### Gong Neng
+- $daily-journal: ben ci fa bu bao han gai ji neng geng xin
+- feat: add personalized writing style learning to diary generation skill
+
 ## [0.2.0] - 2026-03-02
 
 ### Gong Neng
