@@ -1,58 +1,103 @@
 ﻿# sage_skills
 
-Personal skill repository for **(Sagecola)[https://github.com/Sagecola]**.
+Shared skill library by [Sagecola](https://github.com/Sagecola).
 
-This repo is the single source of truth for custom skills, then synced to local runtimes (Codex, Claude Code, Gemini, OpenCode).
+This repository is the source of truth for personal and reusable agent skills.  
+Skills are authored once in `skills/` and synced to local runtimes (Codex, Claude Code, Gemini, OpenCode) via scripts.
 
-## Repo Structure
+## Why This Repo
 
-- `skills/<skill-name>/SKILL.md`
-- Optional per skill: `references/`, `scripts/`, `assets/`
-- Multi-runtime installer: `scripts/install-skills.ps1`
-- Runtime target template: `scripts/targets.example.json`
+- Share battle-tested skills publicly.
+- Keep one canonical definition per skill.
+- Sync quickly across machines and AI runtimes.
 
-Current skills:
-- `daily-journal`
+## Skill Catalog
+
+Current skills are documented in [skills/CATALOG.md](skills/CATALOG.md).
+
+Example:
+- `daily-journal`: generate structured daily journal entries from raw life notes.
+
+## Repository Layout
+
+```text
+skills/
+  <skill-name>/
+    SKILL.md
+    references/   (optional)
+    scripts/      (optional)
+    assets/       (optional)
+scripts/
+  install-skills.ps1
+  install-codex-skill.ps1
+  release.ps1
+  targets.example.json
+CHANGELOG.md
+CHANGELOG.zh.md
+marketplace.json
+```
 
 ## Quick Start
 
-1. Copy target template and edit local paths.
+1. Clone and enter repo.
+```powershell
+git clone https://github.com/Sagecola/sage_skills.git
+cd sage_skills
+```
 
+2. Create runtime target config.
 ```powershell
 Copy-Item ./scripts/targets.example.json ./scripts/targets.json
 ```
 
-2. Install one skill to all enabled runtimes.
-
+3. Dry run first, then install.
 ```powershell
+./scripts/install-skills.ps1 -SkillName daily-journal -DryRun
 ./scripts/install-skills.ps1 -SkillName daily-journal
 ```
 
-3. Install all skills to all enabled runtimes.
-
+Install all skills:
 ```powershell
 ./scripts/install-skills.ps1 -All
 ```
 
-4. Install only to selected runtimes.
-
+Install to selected runtimes only:
 ```powershell
 ./scripts/install-skills.ps1 -SkillName daily-journal -Tool codex,claude_code
 ```
 
 ## Runtime Targets
 
-`targets.json` controls where skills are synced. You can configure:
-- `codex`
-- `claude_code`
-- `gemini`
-- `opencode`
+Configure local output paths in `scripts/targets.json`:
+- `codex` -> `$HOME/.codex/skills`
+- `claude_code` -> `$HOME/.claude/skills`
+- `gemini` -> `$HOME/.gemini/skills`
+- `opencode` -> `$HOME/.opencode/skills`
 
-Each runtime path is local and user-defined. Installer will create missing target directories automatically.
+The installer auto-creates missing target directories.
 
-## GitHub Sync Workflow
+## Versioning & Changelog
 
-1. Create repo `sage_skills` under `Sgaecola`.
-2. Commit and push `main`.
-3. Tag releases when needed (`v0.1.0`, `v0.2.0`, ...).
-4. On another machine: pull latest, run installer, restart relevant tools.
+- English changelog: [CHANGELOG.md](CHANGELOG.md)
+- Chinese changelog: [CHANGELOG.zh.md](CHANGELOG.zh.md)
+
+Use semantic version tags such as `v0.1.0`, `v0.2.0`.
+
+## Release Workflow
+
+Preview release only:
+```powershell
+./scripts/release.ps1 -DryRun
+```
+
+Execute release (update changelogs + bump marketplace version + commit + tag):
+```powershell
+./scripts/release.ps1
+```
+
+Force bump type:
+```powershell
+./scripts/release.ps1 -Minor
+./scripts/release.ps1 -Patch
+./scripts/release.ps1 -Major
+```
