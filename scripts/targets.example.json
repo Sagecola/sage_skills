@@ -1,0 +1,24 @@
+﻿{
+  "targets": [
+    {
+      "name": "codex",
+      "enabled": true,
+      "path": "$HOME/.codex/skills"
+    },
+    {
+      "name": "claude_code",
+      "enabled": true,
+      "path": "$HOME/.claude/skills"
+    },
+    {
+      "name": "gemini",
+      "enabled": true,
+      "path": "$HOME/.gemini/skills"
+    },
+    {
+      "name": "opencode",
+      "enabled": true,
+      "path": "$HOME/.opencode/skills"
+    }
+  ]
+}

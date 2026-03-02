@@ -1,0 +1,14 @@
+﻿# Ignore local editor/runtime noise
+.DS_Store
+Thumbs.db
+
+# Python cache (if later scripts are added)
+__pycache__/
+*.pyc
+
+# Temporary archives
+*.zip
+
+# Local runtime config
+scripts/targets.json
+.tmp-codex-targets.json
