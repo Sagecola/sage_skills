@@ -1,6 +1,6 @@
 ﻿# sage_skills
 
-Personal skill repository for **Sgaecola**.
+Personal skill repository for **(Sagecola)[https://github.com/Sagecola]**.
 
 This repo is the single source of truth for custom skills, then synced to local runtimes (Codex, Claude Code, Gemini, OpenCode).
 
