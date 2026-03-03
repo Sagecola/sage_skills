@@ -29,7 +29,6 @@ skills/
     assets/       (可选)
 scripts/
   install-skills.ps1
-  install-codex-skill.ps1
   release.ps1
   targets.example.json
 CHANGELOG.md
@@ -52,13 +51,13 @@ Copy-Item ./scripts/targets.example.json ./scripts/targets.json
 
 3. 先 dry-run，再安装。
 ```powershell
-./scripts/install-skills.ps1 -SkillName daily-journal -DryRun
-./scripts/install-skills.ps1 -SkillName daily-journal
+./scripts/install-skills.ps1 -DryRun
+./scripts/install-skills.ps1
 ```
 
 安装全部技能：
 ```powershell
-./scripts/install-skills.ps1 -All
+./scripts/install-skills.ps1
 ```
 
 仅安装到指定运行时：

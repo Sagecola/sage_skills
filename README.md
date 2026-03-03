@@ -29,7 +29,6 @@ skills/
     assets/       (optional)
 scripts/
   install-skills.ps1
-  install-codex-skill.ps1
   release.ps1
   targets.example.json
 CHANGELOG.md
@@ -52,13 +51,13 @@ Copy-Item ./scripts/targets.example.json ./scripts/targets.json
 
 3. Dry run first, then install.
 ```powershell
-./scripts/install-skills.ps1 -SkillName daily-journal -DryRun
-./scripts/install-skills.ps1 -SkillName daily-journal
+./scripts/install-skills.ps1 -DryRun
+./scripts/install-skills.ps1
 ```
 
-Install all skills:
+Install one specific skill:
 ```powershell
-./scripts/install-skills.ps1 -All
+./scripts/install-skills.ps1 -SkillName daily-journal
 ```
 
 Install to selected runtimes only:

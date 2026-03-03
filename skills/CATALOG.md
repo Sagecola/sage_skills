@@ -22,5 +22,6 @@ This catalog groups skills by purpose while keeping installation compatible with
 2. Add references/scripts/assets only when needed.
 3. Register the skill in this catalog.
 4. Validate with:
-   - `./scripts/install-skills.ps1 -SkillName <skill-name> -DryRun`
+   - `./scripts/install-skills.ps1 -DryRun`
+   - `./scripts/install-skills.ps1`
    - `./scripts/install-skills.ps1 -SkillName <skill-name>`

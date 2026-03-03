@@ -6,7 +6,6 @@ This repository stores reusable agent skills and sync scripts.
 - `skills/<skill-name>/SKILL.md`: each skill’s primary specification.
 - Optional skill subfolders: `references/`, `scripts/`, `assets/`.
 - `scripts/install-skills.ps1`: main multi-runtime installer.
-- `scripts/install-codex-skill.ps1`: Codex-only wrapper around the main installer.
 - `scripts/targets.example.json`: template for runtime target paths.
 
 Keep each skill self-contained under its own folder (for example, `skills/daily-journal/`).
@@ -16,10 +15,9 @@ This repo has no compile step; use PowerShell scripts for validation and install
 
 ```powershell
 Copy-Item ./scripts/targets.example.json ./scripts/targets.json
-./scripts/install-skills.ps1 -SkillName daily-journal
+./scripts/install-skills.ps1
 ./scripts/install-skills.ps1 -All
 ./scripts/install-skills.ps1 -SkillName daily-journal -Tool codex,claude_code -DryRun
-./scripts/install-codex-skill.ps1 -All -DryRun
 ```
 
 - `-DryRun` is the safest default during development.

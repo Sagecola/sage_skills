@@ -75,14 +75,15 @@ if ($targets.Count -eq 0) {
 }
 
 $skillDirs = @()
+if (-not $All -and [string]::IsNullOrWhiteSpace($SkillName)) {
+    $All = $true
+    Write-Host 'No -SkillName specified. Defaulting to install all skills.'
+}
+
 if ($All) {
     $skillDirs = @(Get-ChildItem -Path $skillsRoot -Directory)
 }
 else {
-    if ([string]::IsNullOrWhiteSpace($SkillName)) {
-        throw 'Specify -SkillName <name> or use -All'
-    }
-
     $source = Join-Path $skillsRoot $SkillName
     if (-not (Test-Path $source)) {
         throw "Skill not found: $source"

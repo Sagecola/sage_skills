@@ -19,14 +19,14 @@
 
 ```powershell
 Copy-Item ./scripts/targets.example.json ./scripts/targets.json
-./scripts/install-skills.ps1 -SkillName daily-journal -DryRun
-./scripts/install-skills.ps1 -SkillName daily-journal
+./scripts/install-skills.ps1 -DryRun
+./scripts/install-skills.ps1
 ```
 
-Install all skills:
+Install this skill only:
 
 ```powershell
-./scripts/install-skills.ps1 -All
+./scripts/install-skills.ps1 -SkillName daily-journal
 ```
 
 ### Usage
@@ -62,14 +62,14 @@ References:
 
 ```powershell
 Copy-Item ./scripts/targets.example.json ./scripts/targets.json
-./scripts/install-skills.ps1 -SkillName daily-journal -DryRun
-./scripts/install-skills.ps1 -SkillName daily-journal
+./scripts/install-skills.ps1 -DryRun
+./scripts/install-skills.ps1
 ```
 
-安装全部技能：
+仅安装这个技能：
 
 ```powershell
-./scripts/install-skills.ps1 -All
+./scripts/install-skills.ps1 -SkillName daily-journal
 ```
 
 ### 使用
