@@ -12,21 +12,36 @@
 - 初版发布自动化脚本（`scripts/release.ps1`）。
 - marketplace 元数据文件（`marketplace.json`）。
 - 中文 README（`README.zh.md`），补齐双语文档。
+- `skills/daily-journal/README.md`，补充技能级使用说明。
+- `skills/daily-journal/references/.journal-style.md`，作为写作风格档案模板与示例格式。
+
+### 变更
+- `daily-journal` 工作流更新为“可选风格档案优先分析 + 可选跨日记关联引用”。
+- 同步更新仓库级 README 与技能目录中的 `daily-journal` 描述。
+- 修复 `skills/daily-journal/references/template.md` 中情绪标签行格式。
+
+## [0.4.0] - 2026-03-03
+
+### Gong Neng
+- $daily-journal: ben ci fa bu bao han gai ji neng geng xin
+
+### Wen Dang
+- README wen dang yi tong bu geng xin
 
 ## [0.3.0] - 2026-03-02
 
-### Gong Neng
+### 功能
 - $daily-journal: ben ci fa bu bao han gai ji neng geng xin
 - feat: add personalized writing style learning to diary generation skill
 
 ## [0.2.0] - 2026-03-02
 
-### Gong Neng
+### 功能
 - feat: add release automation and restructure project
 
-### Qi Ta
+### 其他
 - init sage_skills multi-runtime skill repo
-- 淇 README.md 涓殑 Sagecola 閾炬帴鏍煎紡
+- 修正 README.md 中的 Sagecola 链接格式
 
 ## [0.1.0] - 2026-03-02
 

@@ -1,67 +1,19 @@
 ---
 name: daily-journal
-description: Generate daily journal entries from user's life content with personalized writing style. Use when user wants to create a diary entry, write a journal, or document their daily activities. The skill learns from user's past entries to mimic their unique writing style, tone, and expression patterns.
+description: Generate daily journal entries from user's life content. Use when user wants to create a diary entry, write a journal, or document their daily activities. The skill transforms user's narrative into a structured journal format with work progress, reflections, emotions, gratitude, and thoughts sections.
 ---
 
 # Daily Journal Generator
 
-Generate structured daily journal entries from user's life content using a predefined template. This skill **learns and adapts** to your personal writing style over time.
+Generate structured daily journal entries from user's life content using a predefined template.
 
 ## Quick Start
 
 When the user provides their daily life content, follow this workflow:
 
-1. **Analyze writing style** from past journal entries (if available)
-2. **Extract information** from user's narrative
-3. **Generate journal entry** following the template structure with personalized style
-4. **Save the file** as `YYYY-MM-DD.md` in the output directory
-
-### Output Directory Selection
-
-Determine the output directory in this priority order:
-1. **User-specified path** - If user explicitly mentions where to save (e.g., "保存到桌面", "放在 D:\\Notes 文件夹")
-2. **Current working directory** - Default if no path is specified (the directory where the user is running this command)
-3. **Desktop fallback** - If current directory is unavailable or inappropriate, use the user's Desktop (`%USERPROFILE%\\Desktop` or `~/Desktop`)
-
-Use the `pwd` or equivalent command to check the current working directory before saving.
-
-## Personalized Style Learning
-
-### Step 1: Analyze Past Entries
-
-Before generating a new journal entry, **scan the output directory for existing journal files** (pattern: `YYYY-MM-DD.md` or `*.md`).
-
-If history entries exist (≥1 file), analyze the user's writing style by examining:
-
-**Style Dimensions to Extract:**
-
-| Dimension | What to Look For | Examples |
-|-----------|------------------|----------|
-| **Tone** | Formal vs casual, emotional vs factual | "甚是疲惫" vs "累死了" |
-| **Sentence Length** | Short/brief vs long/detailed | "搞定" vs "终于完成了这个困扰已久的任务" |
-| **Vocabulary** | Preferred words, catchphrases, emoji usage | 常用 "芜湖"、"绝了"、"🎉" |
-| **Expression Style** | Direct vs poetic, literal vs metaphorical | "工作很多" vs "今天像是被任务追着跑" |
-| **Detail Level** | Minimal vs comprehensive | 一句话带过 vs 多维度描述 |
-| **Humor Level** | Serious vs playful | "又加班了😭" vs "今日加班成就达成（1/1）" |
-| **Reflection Depth** | Surface-level vs introspective | "今天不错" vs "意识到自己的焦虑源于对完美的执着" |
-| **Structuring Preference** | Bullet-heavy vs paragraph style | 多条简短要点 vs 连贯叙述 |
-
-**Analysis Method:**
-1. Read the most recent 3-5 journal entries
-2. Extract 3-5 representative phrases/sentences from each
-3. Summarize the dominant style characteristics
-
-### Step 2: Apply Style to New Entry
-
-When generating content, apply the learned style:
-
-- **Match the vocabulary**: Use words and phrases the user commonly uses
-- **Match the tone**: If user is casual/funny, be casual/funny; if serious/reflective, be serious
-- **Match the detail level**: Don't add elaborate descriptions if user prefers brevity
-- **Match the sentence structure**: Mirror the user's sentence length and rhythm
-- **Preserve catchphrases**: If user has signature expressions, use them appropriately
-
-**If no history exists** (first-time user), use a balanced, natural conversational style as default.
+1. **Extract information** from user's narrative
+2. **Generate journal entry** following the template structure
+3. **Save the file** as `YYYY-MM-DD.md` in the current working directory
 
 ## Template Structure
 
@@ -94,10 +46,88 @@ tags:
 ```
 
 Full template reference: [references/template.md](references/template.md)
+Style profile template reference: [references/.journal-style.md](references/.journal-style.md)
+
+**Hard rule for style profile source:**
+- Treat `./.journal-style.md` in the **current working directory** as the only real style profile.
+- `skills/daily-journal/references/.journal-style.md` is a **template format reference only**.
+- Never use `references/.journal-style.md` as personal style data.
 
 ## Generating the Journal
 
-### Step 3: Process User Input
+### Step 0: Learn Writing Style (Optional)
+
+**This step can be skipped to save tokens if user prefers.**
+
+Before generating the journal, learn the user's writing style using a style profile:
+
+#### Option A: Use Existing Style Profile (Recommended - Saves Tokens)
+
+1. **Check for style profile**: Look for `.journal-style.md` file in current directory
+2. **If found**: Read the style profile (only ~200-500 tokens)
+3. **Apply the style**: Use the documented style characteristics when generating the journal
+4. **Scope guard**: Only accept `./.journal-style.md` (cwd). Ignore any `.journal-style.md` under skill `references/` paths.
+
+#### Option B: Create New Style Profile (First Time Only)
+
+If `.journal-style.md` doesn't exist:
+
+1. **Check for recent journals**: Look for files matching `YYYY-MM-DD.md` pattern in current directory
+2. **Read recent entries**: If found, read the 3-5 most recent journal files to gather sufficient style data
+3. **Analyze writing style**:
+   - Sentence structure (short vs long, simple vs complex)
+   - Tone (casual vs formal, humorous vs serious)
+   - Level of detail (concise vs elaborate)
+   - Vocabulary choices (colloquial vs literary)
+   - Emotional expression style (direct vs subtle)
+   - Paragraph organization patterns
+   - Common phrases and expressions
+4. **Generate style profile**: Create `.journal-style.md` file with the analysis
+5. **Use the style**: Apply the learned style to current journal generation
+
+**Style Profile Format:**
+
+```markdown
+# 日记写作风格档案
+
+## 语气特征
+- 整体风格：[随意/正式/中性]
+- 幽默感：[有/无，如何体现]
+- 情绪表达：[直接/含蓄]
+
+## 常用表达
+- 口头禅：[列出常用词汇，如"哈哈"、"咔咔"、"挺"等]
+- 语气词：[列出，如"嘛"、"呢"、"啊"等]
+- 特色表达：[列出独特的表达方式]
+
+## 句式特点
+- 句子长度：[短句为主/长短结合/长句为主]
+- 句式复杂度：[简单/中等/复杂]
+- 段落组织：[一句一段/多句成段]
+
+## 详细程度
+- 工作部分：[简洁/适中/详细]
+- 生活部分：[简洁/适中/详细]
+- 情绪部分：[简洁/适中/详细]
+- 反思部分：[简洁/适中/详细]
+
+## 特殊习惯
+- [列出任何特殊的写作习惯或偏好]
+
+## 示例句子
+- 工作：[1-2个典型句子]
+- 生活：[1-2个典型句子]
+- 情绪：[1-2个典型句子]
+```
+
+**Token Efficiency:**
+- First time (create profile): ~7000-10000 tokens (analyze 3-5 journals + generate profile)
+- Subsequent uses: ~2500-3000 tokens (read profile ~300 tokens + generate journal)
+- **Average savings: 60-70% compared to reading full journals each time**
+
+**If no journals or profile exist**: Use neutral, natural style based on user's input tone.
+
+### Step 1: Process User Input
 
 Analyze the user's narrative and extract:
 - Work accomplishments and progress
@@ -111,7 +141,7 @@ Analyze the user's narrative and extract:
 - Random thoughts
 - Quick notes
 
-### Step 4: Replace Templater Syntax
+### Step 2: Replace Templater Syntax
 
 Replace Obsidian Templater syntax with actual values:
 
@@ -120,9 +150,9 @@ Replace Obsidian Templater syntax with actual values:
 - `<% tp.date.now("YYYY-MM-DD", -1) %>` → Previous day (e.g., "2026-01-25")
 - `<% tp.date.now("YYYY-MM-DD", 1) %>` → Next day (e.g., "2026-01-27")
 
-### Step 5: Fill Content with Personalized Style
+### Step 3: Fill Content
 
-Map extracted information to template sections, applying the learned style:
+Map extracted information to template sections:
 
 **Work Section:**
 - List concrete tasks and achievements under "成果和进展"
@@ -139,82 +169,60 @@ Map extracted information to template sections, applying the learned style:
 - Write free-form thoughts under "思绪"
 - Add quick notes under "Memos"
 
-### Step 6: Save File
+### Step 4: Apply Writing Style and Add Cross-References
+
+Before finalizing the journal content:
+
+1. **Apply learned writing style**:
+   - Match the sentence structure, tone, and vocabulary from recent journals
+   - Maintain consistency in emotional expression
+   - Use similar level of detail and paragraph organization
+
+2. **Add cross-references** (if recurring themes detected):
+   - When mentioning ongoing projects/events, add reference to previous mention
+   - Example: "继续推进 X 项目（参见 [[2026-10-01]]）"
+   - When emotions are similar to recent days, optionally note the pattern
+   - Example: "情绪依然有些低落（和 [[2026-10-05]] 类似）"
+   - When completing yesterday's planned tasks, reference yesterday's journal
+   - Example: "完成了昨天计划的任务（[[2026-10-06]]）"
+
+3. **Check yesterday's "明日工作安排"**:
+   - If yesterday's journal was read in Step 0, compare with today's accomplishments
+   - Optionally add a note about completion status
+
+**Cross-reference guidelines:**
+- Use Obsidian-style links: `[[YYYY-MM-DD]]`
+- Only add references when naturally relevant, don't force it
+- Keep references concise and helpful
+
+### Step 5: Save File
 
 Use Write tool to save the journal entry:
-- **File path**: `{output_dir}/YYYY-MM-DD.md` (use today's date)
-  - `{output_dir}`: The output directory determined above (current working directory or user-specified path)
-- **Content**: The complete journal entry with all sections filled
+- **File path**: `./YYYY-MM-DD.md` (use today's date in current working directory)
+- **Content**: The complete journal entry with all sections filled, styled consistently, and with relevant cross-references
 
-**Examples:**
-- Current directory: `2026-01-26.md`
-- Desktop: `C:\Users\MSA\Desktop\2026-01-26.md`
-- User-specified: `D:\Notes\Journal\2026-01-26.md`
+The file will be saved in the current working directory where the user runs the command.
 
-**Before saving**, confirm the path with the user if it's not the current working directory.
-
-## Style Adaptation Examples
-
-### Example 1: Casual & Humorous Style
-
-**User's past style:**
-> "今天终于把那个破bug修好了，芜湖！🎉 感觉像是打赢了一场boss战。明天继续肝下一个功能，希望能早点下班..."
-
-**New entry (matching style):**
-> "成果和进展：
-> - 搞定了用户模块的重构，代码从 spaghetti 变成了勉强能看的 pasta ✓
-> - 和 PM  battle 了三轮，终于把需求定下来了
->
-> 复盘：
-> - 今天状态还行，没有摸鱼太久（大概）。重构的时候差点被旧代码气死，还好忍住了没有重写整个项目。"
-
-### Example 2: Concise & Factual Style
-
-**User's past style:**
-> "完成 API 文档。修复 2 个 bug。明日计划：接口联调。"
-
-**New entry (matching style):**
-> "成果和进展：
-> - 完成支付模块接口开发
-> - 更新 API 文档
-> - 修复订单查询异常
->
-> 明日工作安排：
-> - 接口联调
-> - 单元测试"
-
-### Example 3: Reflective & Poetic Style
-
-**User's past style:**
-> "今日像是被时间推着走，事情一件接着一件。但傍晚的夕阳让我停下了脚步，突然意识到忙碌中遗漏了很多美好..."
-
-**New entry (matching style):**
-> "流水账：
-> - 晨会、代码评审、需求讨论，一天在会议室与工位之间流转
-> - 傍晚归途，看见银杏叶在路灯下泛着温柔的金光，莫名被治愈
->
-> 情绪：
-> #平静 #疲惫
-> - 今天我感到一种奇怪的平静，像是暴风雨后的湖面。忙碌是表象，内心却在寻找某种锚点。"
+Example filename: `./2026-01-26.md` (saved in current directory)
 
 ## Writing Guidelines
 
-- **Learn from history**: Always analyze past entries first to understand user's unique voice
-- **Stay consistent**: Match the user's preferred level of detail and formality
-- **Keep the structure**: Maintain the template sections regardless of style
-- **Respect preferences**: If user writes short entries, don't generate long ones
-- **Adapt vocabulary**: Use words and phrases the user commonly uses
-- **Mirror emotion expression**: Some users are explicit about feelings, others are subtle
-- **Use first person**: Always write from the user's perspective
-- **Maintain Chinese headers**: Keep section headers in Chinese as per template
+- Keep the original template structure intact
+- Use bullet points for lists
+- Write in first person for personal sections
+- Be specific and concrete, not generic
+- If user doesn't provide information for a section, keep the section header but leave it empty or write minimal content
+- Maintain the Chinese language for section headers and structure
+- **Match the user's personal writing style** learned from recent journals (tone, vocabulary, sentence structure)
+- **Add cross-references** to related previous entries when naturally relevant
+- Use natural, conversational tone that reflects the user's voice
 
 ## Example Usage
 
 **User input:**
 "今天完成了项目的核心功能开发，修复了3个bug。明天计划进行测试。工作上感觉很有成就感。晚上和朋友吃饭，聊得很开心。我感激朋友的陪伴，让我感到温暖。"
 
-**With casual style learned from history:**
-
+**Generated journal** (saved as 2026-01-26.md):
 ```markdown
 ---
 创建时间: 2026-01-26 20:30
@@ -229,47 +237,49 @@ tags:
 ## 工作
 
 ### 成果和进展：
-- 核心功能开发 ✓ 终于搞完了！
-- 顺手修了 3 个 bug，感觉自己今天像个代码杀手
+- 完成了项目的核心功能开发
+- 修复了3个bug
 
 ### 明日工作安排：
-- 开始测试，希望能少踩点坑
+- 进行项目测试
 
 ### 复盘：
-- 今天效率在线，核心功能一次过（意外之喜）。修bug的时候差点被其中一个搞崩溃，还好最后解决了。
+- 今天的工作效率很高，核心功能顺利完成，感觉很有成就感
 
 ## 生活
 
 ### 流水账：
-- 晚上和朋友约饭，聊得超嗨，时间居然过得这么快
+- 晚上和朋友吃饭，聊得很开心
 
 #### 情绪：
-#开心 #暖心 #充实
-- 今天心情不错，工作顺利 + 朋友聚会，double快乐！
+#开心 #暖心
+- 今天我感到开心，因为工作完成得很顺利，晚上和朋友的聚会也很愉快。
 
 #### 感恩：
-1. 感激朋友抽空陪我吃饭，忙了一天后有人陪着聊聊天，真的很治愈
+1. 今天我感激朋友的陪伴，因为让我感到温暖。这让我意识到友情的珍贵。
 
 #### 成就：
-1. 项目核心功能开发完成
-2. 修复 3 个 bug
+1. 完成项目核心功能开发
 
 ### 反思：
-- 今天工作与生活平衡得还行，没加班太久，给自己点个赞
+- 今天工作和生活都很充实，平衡得不错
 
 ### 思绪：
-- 有时候觉得，工作上的成就感和朋友的陪伴，是生活里缺一不可的两部分
+- 工作带来的成就感和朋友的陪伴，都是生活中重要的部分
 
 ### Memos：
-- 继续保持这个节奏
+- 继续保持工作和生活的平衡
 ```
 
 ## Important Notes
 
-- **Style learning is continuous**: Each new entry improves the style understanding
-- **No history = neutral default**: For first-time users, use balanced, natural style
-- **Always read before writing**: Scan the output directory before generating to check for existing entries
-- **Save with UTF-8 encoding** to support Chinese characters properly
-- **Use today's date** if user doesn't specify a date
-- **Preserve template structure** even when adapting to user's writing style
-- **Ask for clarification** if user's input is too minimal to understand their intent
+- Always save files with UTF-8 encoding
+- Use today's date if user doesn't specify a date
+- If user provides minimal information, generate concise content rather than leaving sections completely empty
+- Preserve all Chinese section headers and structure from the template
+- **Check for `.journal-style.md` first** before reading full journal files (saves tokens)
+- **Create style profile on first use** if multiple journal files exist but no profile found
+- **Use Glob tool** to find files: `.journal-style.md` for profile, `20*.md` for journals
+- **Profile path rule**: profile file must be `./.journal-style.md` in current working directory; do not treat skill reference files as user profile
+- **Add cross-references naturally** when mentioning recurring themes, ongoing projects, or related events
+- **Maintain style consistency** by following the style profile or learned patterns

@@ -16,7 +16,7 @@
 当前技能清单见 [skills/CATALOG.md](skills/CATALOG.md)。
 
 示例：
-- `daily-journal`：将零散生活记录整理为结构化日记。
+- `daily-journal`：将零散生活记录整理为结构化日记，并支持写作风格档案与跨日记关联引用。
 
 ## 目录结构
 

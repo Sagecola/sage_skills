@@ -16,7 +16,7 @@ Skills are authored once in `skills/` and synced to local runtimes (Codex, Claud
 Current skills are documented in [skills/CATALOG.md](skills/CATALOG.md).
 
 Example:
-- `daily-journal`: generate structured daily journal entries from raw life notes.
+- `daily-journal`: generate structured daily journal entries from raw life notes, with optional style profile learning and cross-entry references.
 
 ## Repository Layout
 
