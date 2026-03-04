@@ -10,6 +10,12 @@ This catalog groups skills by purpose while keeping installation compatible with
 - Primary file: `skills/daily-journal/SKILL.md`
 - Typical trigger: "write a daily journal", "生成今日日记"
 
+### chinese-typeset-polish
+- Path: `skills/chinese-typeset-polish`
+- Summary: Apply Chinese/mixed-language typesetting standards and light polishing with strict meaning preservation, rule priorities, and file-vs-dialog output modes.
+- Primary file: `skills/chinese-typeset-polish/SKILL.md`
+- Typical trigger: "中文排版优化", "润色这段文案", "处理中英混排", "按规范整理这篇文章"
+
 ## Naming Rules
 
 - Skill directory: kebab-case, e.g., `meeting-notes-cleaner`
