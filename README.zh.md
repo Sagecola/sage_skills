@@ -20,7 +20,6 @@ skills/
     assets/       (鍙€?
 scripts/
   install-skills.ps1
-  release.ps1
   targets.example.json
 ```
 
@@ -52,18 +51,13 @@ Copy-Item ./scripts/targets.example.json ./scripts/targets.json
 ## 鍙戝竷娴佺▼
 
 棰勮鍙戝竷鍐呭锛堜笉鏀规枃浠讹級锛?```powershell
-./scripts/release.ps1 -DryRun
 ```
 
 鎵ц鍙戝竷锛堟洿鏂?changelog + 鏇存柊 marketplace 鐗堟湰 + 鎻愪氦 + 鎵?tag锛夛細
 ```powershell
-./scripts/release.ps1
 ```
 
 寮哄埗鐗堟湰绫诲瀷锛?```powershell
-./scripts/release.ps1 -Minor
-./scripts/release.ps1 -Patch
-./scripts/release.ps1 -Major
 ```
 
 ## 鐗堟湰涓庡彉鏇?

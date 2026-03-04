@@ -29,7 +29,6 @@ skills/
     assets/       (optional)
 scripts/
   install-skills.ps1
-  release.ps1
   targets.example.json
 .claude-plugin/
   marketplace.json
@@ -89,24 +88,6 @@ The installer auto-creates missing target directories.
 
 ## Versioning
 
-Use semantic version tags such as `v0.1.0`, `v0.2.0`.
-The release script bumps `.claude-plugin/marketplace.json` (and `.claude-plugin/plugin.json` when present).
-
-## Release Workflow
-
-Preview release only:
-```powershell
-./scripts/release.ps1 -DryRun
-```
-
-Execute release (bump marketplace version + commit + tag):
-```powershell
-./scripts/release.ps1
-```
-
-Force bump type:
-```powershell
-./scripts/release.ps1 -Minor
-./scripts/release.ps1 -Patch
-./scripts/release.ps1 -Major
-```
+This repo uses manual versioning for marketplace metadata:
+- `.claude-plugin/marketplace.json` -> `metadata.version` and `plugins[].version`
+- `.claude-plugin/plugin.json` -> `version`
