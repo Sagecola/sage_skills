@@ -34,6 +34,9 @@ scripts/
 CHANGELOG.md
 CHANGELOG.zh.md
 marketplace.json
+.claude-plugin/
+  marketplace.json
+  plugin.json
 ```
 
 ## Quick Start
@@ -63,6 +66,18 @@ Install one specific skill:
 Install to selected runtimes only:
 ```powershell
 ./scripts/install-skills.ps1 -SkillName daily-journal -Tool codex,claude_code
+```
+
+## Claude Code Marketplace
+
+This repo now includes Claude marketplace metadata at:
+- `.claude-plugin/marketplace.json`
+- `.claude-plugin/plugin.json`
+
+Typical install flow:
+```text
+/plugin marketplace add Sagecola/sage_skills
+/plugin install sage-skills@sage-skills
 ```
 
 ## Runtime Targets

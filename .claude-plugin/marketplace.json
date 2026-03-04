@@ -1,0 +1,19 @@
+{
+    "name": "sage-skills",
+    "owner": {
+        "name": "Sagecola",
+        "url": "https://github.com/Sagecola"
+    },
+    "metadata": {
+        "description": "Reusable cross-runtime skill library.",
+        "version": "0.4.0"
+    },
+    "plugins": [
+        {
+            "name": "sage-skills",
+            "source": "./",
+            "description": "Sage Skills marketplace bundle.",
+            "version": "0.4.0"
+        }
+    ]
+}

@@ -89,3 +89,16 @@ Copy-Item ./scripts/targets.example.json ./scripts/targets.json
 - 鑻辨枃鏃ュ織锛歔CHANGELOG.md](CHANGELOG.md)
 - 涓枃鏃ュ織锛歔CHANGELOG.zh.md](CHANGELOG.zh.md)
 - 甯傚満鍏冩暟鎹細[marketplace.json](marketplace.json)
+
+## Claude Code Marketplace 安装
+
+本仓库已提供 Claude marketplace 元数据：
+- `.claude-plugin/marketplace.json`
+- `.claude-plugin/plugin.json`
+
+可在 Claude Code 中执行：
+
+```text
+/plugin marketplace add Sagecola/sage_skills
+/plugin install sage-skills@sage-skills
+```
