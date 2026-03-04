@@ -31,9 +31,6 @@ scripts/
   install-skills.ps1
   release.ps1
   targets.example.json
-CHANGELOG.md
-CHANGELOG.zh.md
-marketplace.json
 .claude-plugin/
   marketplace.json
   plugin.json
@@ -90,12 +87,10 @@ Configure local output paths in `scripts/targets.json`:
 
 The installer auto-creates missing target directories.
 
-## Versioning & Changelog
-
-- English changelog: [CHANGELOG.md](CHANGELOG.md)
-- Chinese changelog: [CHANGELOG.zh.md](CHANGELOG.zh.md)
+## Versioning
 
 Use semantic version tags such as `v0.1.0`, `v0.2.0`.
+The release script bumps `.claude-plugin/marketplace.json` (and `.claude-plugin/plugin.json` when present).
 
 ## Release Workflow
 
@@ -104,7 +99,7 @@ Preview release only:
 ./scripts/release.ps1 -DryRun
 ```
 
-Execute release (update changelogs + bump marketplace version + commit + tag):
+Execute release (bump marketplace version + commit + tag):
 ```powershell
 ./scripts/release.ps1
 ```

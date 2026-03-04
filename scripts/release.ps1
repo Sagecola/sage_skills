@@ -45,80 +45,6 @@ function Get-ChangedFiles {
     return @($files | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Sort-Object -Unique)
 }
 
-function Build-SectionLines {
-    param(
-        [string]$Title,
-        [string[]]$Items
-    )
-
-    if (-not $Items -or $Items.Count -eq 0) {
-        return @()
-    }
-
-    $lines = @("### $Title")
-    foreach ($item in $Items) {
-        $lines += "- $item"
-    }
-    $lines += ""
-    return $lines
-}
-
-function Insert-ChangelogEntry {
-    param(
-        [string]$Path,
-        [string]$Version,
-        [string]$DateText,
-        [hashtable]$Sections,
-        [string[]]$SectionOrder
-    )
-
-    $entryLines = @("## [$Version] - $DateText", "")
-    foreach ($name in $SectionOrder) {
-        $entryLines += Build-SectionLines -Title $name -Items $Sections[$name]
-    }
-    $entryText = ($entryLines -join "`r`n").TrimEnd() + "`r`n`r`n"
-
-    if (-not (Test-Path $Path)) {
-        $header = @(
-            "# Changelog",
-            "",
-            "## [Unreleased]",
-            "",
-            $entryText.TrimEnd()
-        ) -join "`r`n"
-        Set-Content -Path $Path -Encoding UTF8 -Value ($header + "`r`n")
-        return
-    }
-
-    $lines = Get-Content -Path $Path
-    $existing = @($lines | Where-Object { $_ -match "^## \[$([regex]::Escape($Version))\]\b" })
-    if ($existing.Count -gt 0) {
-        return
-    }
-
-    $firstVersionIdx = -1
-    for ($i = 0; $i -lt $lines.Count; $i++) {
-        if ($lines[$i] -match '^## \[(?!Unreleased\])') {
-            $firstVersionIdx = $i
-            break
-        }
-    }
-
-    if ($firstVersionIdx -lt 0) {
-        $updated = ($lines -join "`r`n").TrimEnd() + "`r`n`r`n" + $entryText
-    }
-    else {
-        $top = @()
-        if ($firstVersionIdx -gt 0) {
-            $top = $lines[0..($firstVersionIdx - 1)]
-        }
-        $bottom = $lines[$firstVersionIdx..($lines.Count - 1)]
-        $updated = ($top -join "`r`n").TrimEnd() + "`r`n`r`n" + $entryText + ($bottom -join "`r`n").TrimEnd() + "`r`n"
-    }
-
-    Set-Content -Path $Path -Encoding UTF8 -Value $updated
-}
-
 $flagCount = (@($Major, $Minor, $Patch) | Where-Object { $_ -eq $true } | Measure-Object).Count
 if ($flagCount -gt 1) {
     throw "Use only one version flag: -Major, -Minor, or -Patch."
@@ -127,27 +53,33 @@ if ($flagCount -gt 1) {
 $repoRoot = Split-Path -Parent $PSScriptRoot
 Push-Location $repoRoot
 try {
-    $marketplacePath = if (Test-Path ".claude-plugin/marketplace.json") {
-        ".claude-plugin/marketplace.json"
-    }
-    elseif (Test-Path "marketplace.json") {
-        "marketplace.json"
-    }
-    else {
-        "marketplace.json"
-    }
+    $pluginDir = ".claude-plugin"
+    $marketplacePath = Join-Path $pluginDir "marketplace.json"
+    $pluginManifestPath = Join-Path $pluginDir "plugin.json"
 
     if (-not (Test-Path $marketplacePath)) {
+        if (-not (Test-Path $pluginDir)) {
+            New-Item -ItemType Directory -Path $pluginDir -Force | Out-Null
+        }
+
         $seed = @{
+            name = "sage-skills"
+            owner = @{
+                name = "Sagecola"
+                url = "https://github.com/Sagecola"
+            }
             metadata = @{
-                name = "sage_skills"
-                displayName = "Sage Skills"
                 description = "Reusable cross-runtime skill library."
-                author = "Sagecola"
                 version = "0.1.0"
             }
-            repository = "https://github.com/Sagecola/sage_skills"
-            skillsDir = "skills"
+            plugins = @(
+                @{
+                    name = "sage-skills"
+                    source = "./"
+                    description = "Sage Skills marketplace bundle."
+                    version = "0.1.0"
+                }
+            )
         }
         $seed | ConvertTo-Json -Depth 8 | Set-Content -Path $marketplacePath -Encoding UTF8
     }
@@ -207,86 +139,6 @@ try {
     }
 
     $nextVersion = Get-NextVersion -Current $currentVersion -Bump $bump
-    $today = Get-Date -Format "yyyy-MM-dd"
-
-    $featuresEn = @()
-    $fixesEn = @()
-    $docsEn = @()
-    $otherEn = @()
-    $featuresZh = @()
-    $fixesZh = @()
-    $docsZh = @()
-    $otherZh = @()
-
-    foreach ($line in $commitLines) {
-        $message = ($line -replace '^[a-f0-9]+\s+', '').Trim()
-        if ($message -match '^feat(\(.+\))?:') {
-            $featuresEn += $message
-            $featuresZh += $message
-        }
-        elseif ($message -match '^fix(\(.+\))?:') {
-            $fixesEn += $message
-            $fixesZh += $message
-        }
-        elseif ($message -match '^docs(\(.+\))?:') {
-            $docsEn += $message
-            $docsZh += $message
-        }
-        else {
-            $otherEn += $message
-            $otherZh += $message
-        }
-    }
-
-    foreach ($skill in $newSkills) {
-        $featuresEn += "`$$skill`: skill updates included in this release"
-        $featuresZh += "`$$skill`: ben ci fa bu bao han gai ji neng geng xin"
-    }
-
-    if (($changedFiles -contains "README.md") -or ($changedFiles -contains "README.zh.md")) {
-        $docsEn += "README updated for release"
-        $docsZh += "README wen dang yi tong bu geng xin"
-    }
-    if ($changedFiles -contains "scripts/release.ps1") {
-        $otherEn += "release automation script added or updated"
-        $otherZh += "xin zeng huo geng xin release zi dong hua jiao ben"
-    }
-    if (($changedFiles -contains "marketplace.json") -or ($changedFiles -contains ".claude-plugin/marketplace.json")) {
-        $otherEn += "marketplace metadata updated"
-        $otherZh += "marketplace yuan shu ju yi geng xin"
-    }
-
-    $featuresEn = @($featuresEn | Sort-Object -Unique)
-    $fixesEn = @($fixesEn | Sort-Object -Unique)
-    $docsEn = @($docsEn | Sort-Object -Unique)
-    $otherEn = @($otherEn | Sort-Object -Unique)
-    $featuresZh = @($featuresZh | Sort-Object -Unique)
-    $fixesZh = @($fixesZh | Sort-Object -Unique)
-    $docsZh = @($docsZh | Sort-Object -Unique)
-    $otherZh = @($otherZh | Sort-Object -Unique)
-
-    if (
-        $featuresEn.Count -eq 0 -and
-        $fixesEn.Count -eq 0 -and
-        $docsEn.Count -eq 0 -and
-        $otherEn.Count -eq 0
-    ) {
-        $otherEn = @("maintenance updates")
-        $otherZh = @("wei hu xing geng xin")
-    }
-
-    $sectionsEn = @{
-        "Features" = $featuresEn
-        "Fixes" = $fixesEn
-        "Documentation" = $docsEn
-        "Other" = $otherEn
-    }
-    $sectionsZh = @{
-        "Gong Neng" = $featuresZh
-        "Xiu Fu" = $fixesZh
-        "Wen Dang" = $docsZh
-        "Qi Ta" = $otherZh
-    }
 
     if ($DryRun) {
         Write-Host "=== DRY RUN MODE ==="
@@ -307,21 +159,36 @@ try {
         }
         Write-Host ""
         Write-Host "Files to modify:"
-        Write-Host "- CHANGELOG.md"
-        Write-Host "- CHANGELOG.zh.md"
         Write-Host "- $marketplacePath"
+        if (Test-Path $pluginManifestPath) {
+            Write-Host "- $pluginManifestPath"
+        }
         Write-Host ""
         Write-Host "No changes made. Run without -DryRun to execute."
         return
     }
 
     $marketplace.metadata.version = $nextVersion
+    if ($marketplace.plugins) {
+        foreach ($entry in $marketplace.plugins) {
+            if ($entry.PSObject.Properties.Name -contains "version") {
+                $entry.version = $nextVersion
+            }
+        }
+    }
     $marketplace | ConvertTo-Json -Depth 8 | Set-Content -Path $marketplacePath -Encoding UTF8
 
-    Insert-ChangelogEntry -Path "CHANGELOG.md" -Version $nextVersion -DateText $today -Sections $sectionsEn -SectionOrder @("Features", "Fixes", "Documentation", "Other")
-    Insert-ChangelogEntry -Path "CHANGELOG.zh.md" -Version $nextVersion -DateText $today -Sections $sectionsZh -SectionOrder @("Gong Neng", "Xiu Fu", "Wen Dang", "Qi Ta")
+    $filesToAdd = @($marketplacePath)
 
-    $filesToAdd = @("CHANGELOG.md", "CHANGELOG.zh.md", $marketplacePath)
+    if (Test-Path $pluginManifestPath) {
+        $pluginManifest = Get-Content -Path $pluginManifestPath -Raw | ConvertFrom-Json
+        if ($pluginManifest.PSObject.Properties.Name -contains "version") {
+            $pluginManifest.version = $nextVersion
+            $pluginManifest | ConvertTo-Json -Depth 8 | Set-Content -Path $pluginManifestPath -Encoding UTF8
+            $filesToAdd += $pluginManifestPath
+        }
+    }
+
     if (Test-Path "README.md") { $filesToAdd += "README.md" }
     if (Test-Path "README.zh.md") { $filesToAdd += "README.zh.md" }
 
