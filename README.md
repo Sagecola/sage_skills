@@ -17,6 +17,7 @@ Current skills are documented in [skills/CATALOG.md](skills/CATALOG.md).
 
 Example:
 - `daily-journal`: generate structured daily journal entries from raw life notes, with optional style profile learning and cross-entry references.
+- `chinese-typeset-polish`: polish Chinese/mixed-language writing with consistent typesetting rules and minimal semantic edits.
 
 ## Repository Layout
 
@@ -57,6 +58,11 @@ Copy-Item ./scripts/targets.example.json ./scripts/targets.json
 Install one specific skill:
 ```powershell
 ./scripts/install-skills.ps1 -SkillName daily-journal
+```
+
+For copywriting/typesetting:
+```powershell
+./scripts/install-skills.ps1 -SkillName chinese-typeset-polish
 ```
 
 Install to selected runtimes only:

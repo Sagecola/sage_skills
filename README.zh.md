@@ -1,66 +1,74 @@
 ﻿# sage_skills
 
-鐢?[Sagecola](https://github.com/Sagecola) 缁存姢鐨勫彲澶嶇敤鎶€鑳藉簱銆?
-鏈粨搴撴槸涓汉涓庡彲鍒嗕韩鎶€鑳界殑鍞竴浜嬪疄鏉ユ簮銆? 
-鎵€鏈夋妧鑳界粺涓€缁存姢鍦?`skills/`锛岄€氳繃鑴氭湰鍚屾鍒版湰鍦板杩愯鏃讹紙Codex銆丆laude Code銆丟emini銆丱penCode锛夈€?
-## 浠撳簱鐩爣
+由 [Sagecola](https://github.com/Sagecola) 维护的可复用技能库。
 
-- 瀵瑰鍒嗕韩鑷繁闀挎湡浣跨敤涓旂ǔ瀹氱殑鎶€鑳姐€?- 姣忎釜鎶€鑳藉彧缁存姢涓€浠芥爣鍑嗗畾涔夈€?- 鏀寔澶氳澶囥€佸杩愯鏃跺揩閫熷悓姝ャ€?
-## 鎶€鑳界洰褰?
-褰撳墠鎶€鑳芥竻鍗曡 [skills/CATALOG.md](skills/CATALOG.md)銆?
-绀轰緥锛?- `daily-journal`锛氬皢闆舵暎鐢熸椿璁板綍鏁寸悊涓虹粨鏋勫寲鏃ヨ锛屽苟鏀寔鍐欎綔椋庢牸妗ｆ涓庤法鏃ヨ鍏宠仈寮曠敤銆?
-## 鐩綍缁撴瀯
+本仓库是个人与可共享技能的唯一事实来源。  
+所有技能统一维护在 `skills/`，通过脚本同步到本地多运行时（Codex、Claude Code、Gemini、OpenCode）。
+
+## 仓库目标
+
+- 对外分享长期稳定可复用的技能。
+- 每个技能只维护一份标准定义。
+- 支持多设备、多运行时快速同步。
+
+## 技能目录
+
+当前技能清单见 [skills/CATALOG.md](skills/CATALOG.md)。
+
+示例：
+- `daily-journal`：将零散生活记录整理为结构化日记，支持写作风格档案与跨日期引用。
+- `chinese-typeset-polish`：按中文与中英混排规范进行排版优化，并做最小化润色。
+
+## 目录结构
 
 ```text
 skills/
   <skill-name>/
     SKILL.md
-    references/   (鍙€?
-    scripts/      (鍙€?
-    assets/       (鍙€?
+    references/   (可选)
+    scripts/      (可选)
+    assets/       (可选)
 scripts/
   install-skills.ps1
   targets.example.json
+.claude-plugin/
+  marketplace.json
+  plugin.json
 ```
 
-## 蹇€熷紑濮?
-1. 鍏嬮殕浠撳簱骞惰繘鍏ョ洰褰曘€?```powershell
+## 快速开始
+
+1. 克隆仓库并进入目录。
+```powershell
 git clone https://github.com/Sagecola/sage_skills.git
 cd sage_skills
 ```
 
-2. 澶嶅埗骞剁紪杈戠洰鏍囪繍琛屾椂閰嶇疆銆?```powershell
+2. 创建运行时目标配置。
+```powershell
 Copy-Item ./scripts/targets.example.json ./scripts/targets.json
 ```
 
-3. 鍏?dry-run锛屽啀瀹夎銆?```powershell
+3. 先 DryRun，再正式安装。
+```powershell
 ./scripts/install-skills.ps1 -DryRun
 ./scripts/install-skills.ps1
 ```
 
-瀹夎鍏ㄩ儴鎶€鑳斤細
+安装单个技能：
 ```powershell
-./scripts/install-skills.ps1
+./scripts/install-skills.ps1 -SkillName daily-journal
 ```
 
-浠呭畨瑁呭埌鎸囧畾杩愯鏃讹細
+安装排版润色技能：
+```powershell
+./scripts/install-skills.ps1 -SkillName chinese-typeset-polish
+```
+
+仅安装到指定运行时：
 ```powershell
 ./scripts/install-skills.ps1 -SkillName daily-journal -Tool codex,claude_code
 ```
-
-## 鍙戝竷娴佺▼
-
-棰勮鍙戝竷鍐呭锛堜笉鏀规枃浠讹級锛?```powershell
-```
-
-鎵ц鍙戝竷锛堟洿鏂?changelog + 鏇存柊 marketplace 鐗堟湰 + 鎻愪氦 + 鎵?tag锛夛細
-```powershell
-```
-
-寮哄埗鐗堟湰绫诲瀷锛?```powershell
-```
-
-## 鐗堟湰涓庡彉鏇?
 
 ## Claude Code Marketplace 安装
 
@@ -75,3 +83,18 @@ Copy-Item ./scripts/targets.example.json ./scripts/targets.json
 /plugin install sage-skills@sage-skills
 ```
 
+## 运行时目标
+
+在 `scripts/targets.json` 配置输出路径：
+- `codex` -> `$HOME/.codex/skills`
+- `claude_code` -> `$HOME/.claude/skills`
+- `gemini` -> `$HOME/.gemini/skills`
+- `opencode` -> `$HOME/.opencode/skills`
+
+安装脚本会自动创建不存在的目录。
+
+## 版本管理
+
+本仓库对 marketplace 元数据使用手工版本管理：
+- `.claude-plugin/marketplace.json` -> `metadata.version` 与 `plugins[].version`
+- `.claude-plugin/plugin.json` -> `version`

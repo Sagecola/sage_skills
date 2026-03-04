@@ -5,6 +5,7 @@ This repository stores reusable agent skills and sync scripts.
 
 - `skills/<skill-name>/SKILL.md`: each skill’s primary specification.
 - Optional skill subfolders: `references/`, `scripts/`, `assets/`.
+- Do not add per-skill `README.md`; keep skill instructions in `SKILL.md` and supporting details in `references/`.
 - `scripts/install-skills.ps1`: main multi-runtime installer.
 - `scripts/targets.example.json`: template for runtime target paths.
 
