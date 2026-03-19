@@ -3,8 +3,8 @@
 ## YAML 示例
 
 ```yaml
-created: 2026-03-19
-modified: 2026-03-19
+created: 2026-03-19T09:22:00+08:00
+modified: 2026-03-19T09:22:00+08:00
 title: 芬顿氧化处理化学镍水实验报告
 url:
 author:

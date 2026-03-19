@@ -3,8 +3,8 @@
 ## YAML 示例
 
 ```yaml
-created: 2026-03-19
-modified: 2026-03-19
+created: 2026-03-19T09:22:00+08:00
+modified: 2026-03-19T09:22:00+08:00
 title: 硬地骇客 EP.123 如何建立第二大脑
 url: https://example.com/episode-123
 author: 硬地骇客

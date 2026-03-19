@@ -5,8 +5,8 @@
 All notes must include these fields in this exact order:
 
 ```yaml
-created: YYYY-MM-DD
-modified: YYYY-MM-DD
+created: 2026-03-19T09:22:00+08:00
+modified: 2026-03-19T09:22:00+08:00
 title: 笔记标题
 url:
 author:
@@ -19,7 +19,7 @@ cover:
 
 ## Field Behavior
 
-- **created / modified**: Use today's date in ISO format (`YYYY-MM-DD`)
+- **created / modified**: Use the current datetime in full ISO 8601 format with China timezone offset: `YYYY-MM-DDTHH:MM:00+08:00`. If the user provides a specific time, use it; otherwise use the current time at note generation.
 - **slug**: Auto-generate from title as kebab-case English. Examples:
   - `奥本海默` → `oppenheimer`
   - `三体` → `three-body-problem`
