@@ -18,6 +18,7 @@ Current skills are documented in [skills/CATALOG.md](skills/CATALOG.md).
 Example:
 - `daily-journal`: generate structured daily journal entries from raw life notes, with optional style profile learning and cross-entry references.
 - `chinese-typeset-polish`: polish Chinese/mixed-language writing with consistent typesetting rules and minimal semantic edits.
+- `obsidian-note`: generate structured Obsidian notes with correct YAML frontmatter for 7 note types — media, book, person, podcast, code, report, and general.
 
 ## Repository Layout
 
@@ -63,6 +64,11 @@ Install one specific skill:
 For copywriting/typesetting:
 ```powershell
 ./scripts/install-skills.ps1 -SkillName chinese-typeset-polish
+```
+
+For Obsidian notes:
+```powershell
+./scripts/install-skills.ps1 -SkillName obsidian-note
 ```
 
 Install to selected runtimes only:

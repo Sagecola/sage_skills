@@ -10,6 +10,12 @@ This catalog groups skills by purpose while keeping installation compatible with
 - Primary file: `skills/daily-journal/SKILL.md`
 - Typical trigger: "write a daily journal", "生成今日日记"
 
+### obsidian-note
+- Path: `skills/obsidian-note`
+- Summary: Generate structured Obsidian notes with correct YAML frontmatter and content sections for 7 note types: 影视, 书籍, 人际, 播客, 代码, 报告, 通用.
+- Primary file: `skills/obsidian-note/SKILL.md`
+- Typical trigger: "帮我写一篇笔记", "新建影视笔记", "创建人际档案", "obsidian note"
+
 ### chinese-typeset-polish
 - Path: `skills/chinese-typeset-polish`
 - Summary: Apply Chinese/mixed-language typesetting standards and light polishing with strict meaning preservation, rule priorities, and file-vs-dialog output modes.

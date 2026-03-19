@@ -18,6 +18,7 @@
 示例：
 - `daily-journal`：将零散生活记录整理为结构化日记，支持写作风格档案与跨日期引用。
 - `chinese-typeset-polish`：按中文与中英混排规范进行排版优化，并做最小化润色。
+- `obsidian-note`：生成带有规范 YAML frontmatter 的 Obsidian 笔记，支持影视、书籍、人际、播客、代码、报告、通用共 7 种笔记类型。
 
 ## 目录结构
 
@@ -63,6 +64,11 @@ Copy-Item ./scripts/targets.example.json ./scripts/targets.json
 安装排版润色技能：
 ```powershell
 ./scripts/install-skills.ps1 -SkillName chinese-typeset-polish
+```
+
+安装 Obsidian 笔记技能：
+```powershell
+./scripts/install-skills.ps1 -SkillName obsidian-note
 ```
 
 仅安装到指定运行时：
