@@ -10,6 +10,12 @@ This catalog groups skills by purpose while keeping installation compatible with
 - Primary file: `skills/daily-journal/SKILL.md`
 - Typical trigger: "write a daily journal", "生成今日日记"
 
+### weekly-journal
+- Path: `skills/weekly-journal`
+- Summary: Generate structured weekly journals from daily journal files. Distills daily entries (流水账, 情绪, 感恩, 成就, 复盘, 思绪) into weekly format (内容, 进展, 改进, 计划, 回顾, 健康, 社交, 成长, 娱乐, 思考). When no strong reflection exists, offers contextual thinking prompts. Checks for existing blank weekly file first, then fills or creates.
+- Primary file: `skills/weekly-journal/SKILL.md`
+- Typical trigger: "帮我写 2026-W01 的周记", "生成本周周记", "写周记"
+
 ### obsidian-note
 - Path: `skills/obsidian-note`
 - Summary: Generate structured Obsidian notes with correct YAML frontmatter and content sections for 7 note types: 影视, 书籍, 人际, 播客, 代码, 报告, 通用.
