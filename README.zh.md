@@ -17,6 +17,7 @@
 
 示例：
 - `daily-journal`：将零散生活记录整理为结构化日记，支持写作风格档案与跨日期引用。
+- `weekly-journal`：将一周的日记蒸馏为结构化周记，自动提炼流水账/情绪/感恩/成就为内容/进展/改进/回顾/成长/思考。说"帮我写 2026-W01 的周记"即可触发，自动定位日记文件并填充或新建周记。
 - `chinese-typeset-polish`：按中文与中英混排规范进行排版优化，并做最小化润色。
 - `obsidian-note`：生成带有规范 YAML frontmatter 的 Obsidian 笔记，支持影视、书籍、人际、播客、代码、报告、通用共 7 种笔记类型。
 
@@ -59,6 +60,11 @@ Copy-Item ./scripts/targets.example.json ./scripts/targets.json
 安装单个技能：
 ```powershell
 ./scripts/install-skills.ps1 -SkillName daily-journal
+```
+
+安装周记技能：
+```powershell
+./scripts/install-skills.ps1 -SkillName weekly-journal
 ```
 
 安装排版润色技能：

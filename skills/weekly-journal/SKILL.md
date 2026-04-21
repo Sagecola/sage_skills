@@ -30,8 +30,8 @@ Weekly journals use ISO week format: `YYYY-Www.md`
 
 ```markdown
 ---
-创建时间: [Current datetime]
-更新时间: [Current datetime]
+created: [Current datetime]
+modified: [Current datetime]
 tags:
   - 工作
   - 生活
@@ -44,19 +44,19 @@ tags:
 
 ## 工作
 
-### 内容
-### 进展
-### 改进
-### 计划
+### 内容：
+### 进展：
+### 改进：
+### 下周计划：
 
 ## 生活
 
-### 回顾
-### 健康
-### 社交
-### 成长
-### 娱乐
-### 思考
+### 回顾：
+### 健康：
+### 社交：
+### 成长：
+### 娱乐：
+### 思考：
 ```
 
 Full template reference: [references/template.md](references/template.md)
@@ -194,7 +194,7 @@ These daily journal sections do NOT appear in the weekly journal:
 - KEEP: specific mistakes, process failures, actionable lessons
 - Bullet list, focus on what can be done differently
 
-**计划 (Next Week Plan)**
+**下周计划 (Next Week Plan)**
 - Source: the last working day's "明日工作安排" + any forward-looking items mentioned during the week
 - Bullet list of next week's priorities, scheduled events, and goals
 
@@ -204,67 +204,61 @@ These daily journal sections do NOT appear in the weekly journal:
 - Source: "流水账" from all days — select only the meaningful moments
 - DROP: waking times, meal details, minor errands, routine commutes
 - KEEP: notable outings, meaningful conversations, pleasant surprises, emotional highlights
-- Write as ONE flowing paragraph capturing the overall feel of the week
+- Write as paragraph-style prose, but each paragraph/sentence prefixed with `- `
 - Include the emotional tone naturally (without using hashtag tags)
 
 **健康 (Health)**
 - Source: exercise mentions, diet comments, sleep/fatigue mentions across all days
-- Summarize patterns: what exercise was done, how diet was, how energy levels felt
-- Note any concerns or improvements
-- One short paragraph or a few sentences
+- Write as paragraph-style prose prefixed with `- `, covering exercise, diet, sleep, and any body signals worth noting
+- Note any patterns, concerns, or improvements
 
 **社交 (Social)**
 - Source: all interpersonal interactions from "流水账" across the week
 - DROP: brief work coordination (unless it had personal significance)
 - KEEP: meals with friends, meaningful conversations, new connections, group activities
-- Use Obsidian links for people: `[[真名|昵称]]`
-- One paragraph, capture the quality of connections not just the events
+- Write as paragraph-style prose prefixed with `- `, use Obsidian links for people: `[[真名|昵称]]`
+- Capture the quality of connections, not just the events
 
 **成长 (Growth)**
 - Source: podcasts, books, articles, tools learned, realizations from "思绪" and "流水账"
-- This is the intellectual harvest of the week
 - KEEP: specific insights, new skills, knowledge gained, perspective shifts
 - DROP: generic "learned a lot" statements
-- One paragraph, be specific about what was learned and why it matters
+- Write as paragraph-style prose prefixed with `- `, be specific about what was learned and why it matters
 
 **娱乐 (Entertainment)**
 - Source: shows watched, games played, live streams, music, outings for fun
-- Bullet list or short paragraph
-- Be honest — "主要是躺着休息" is a valid entry
+- Write as paragraph-style prose prefixed with `- `
+- Be honest — `- 主要是躺着休息` is a valid entry
 
 **思考 (Reflection)**
 - Source: the most interesting/deep item from "思绪" across the week — pick ONE topic
-- This is NOT a summary of all thoughts — it's a deep dive into one
-- Use the callout format:
+- **If the user's daily journals have a strong "思绪"**: develop it into a callout block:
   ```
   > [!summary]+ [思考标题] #可选标签
   > 
   > 深度思考内容...
   ```
-- The title should name the topic (e.g., "记录生活有感", "关于记忆和消费", "个性")
-- Expand the thought: add context, reasoning, connections to other ideas
-- This section should feel like genuine reflection, not a recap
-- If multiple "思绪" entries are worth preserving, pick the one with the most depth or combine related ones into a single coherent reflection
-
-**If no strong "思绪" exists this week:**
-- The 思考 section is meant to encourage deep reflection, not to force it
-- If the user's daily journals lack substantial thoughts this week, you can offer a reflection prompt based on the week's content
-- Suggested prompt directions (pick ONE that fits the week's themes):
-  - **Work-related**: "本周工作中遇到的挑战让我思考……"（关于问题解决、团队协作、专业成长）
-  - **Life balance**: "关于工作与生活的平衡"（时间管理、优先级、自我关怀）
-  - **Relationships**: "人际关系中的……"（沟通、边界、理解差异）
-  - **Learning**: "学习与成长"（知识输入输出、技能习得、认知升级）
-  - **Self-awareness**: "关于自我认知"（情绪管理、性格特质、价值观）
-  - **Current events**: If the week had notable news/trends, connect to personal experience
-  - **Habits & routines**: "关于习惯养成"（坚持、改变、系统）
-- Format the prompt as a question or opening statement, then leave space for the user to develop it
-- Example:
-  ```
-  > [!summary]+ 本周思考方向
-  > 
-  > 本周在工作中多次遇到需要与不同部门协作的情况，这让我思考：有效的跨部门沟通需要哪些要素？我在这方面还有哪些可以改进的地方？
-  ```
-- Mark this as a "思考方向提示" so the user knows it's a prompt, not a completed reflection
+  - The title should name the topic (e.g., "记录生活有感", "个性", "关于驱动力")
+  - Expand the thought: add context, reasoning, connections to other ideas
+  - This should feel like genuine reflection, not a recap
+- **If no strong "思绪" exists this week**: offer a reflection prompt based on the week's content
+  - Suggested prompt directions (pick ONE that fits the week's themes):
+    - **Work-related**: "本周工作中遇到的挑战让我思考……"（关于问题解决、团队协作、专业成长）
+    - **Life balance**: "关于工作与生活的平衡"（时间管理、优先级、自我关怀）
+    - **Relationships**: "人际关系中的……"（沟通、边界、理解差异）
+    - **Learning**: "学习与成长"（知识输入输出、技能习得、认知升级）
+    - **Self-awareness**: "关于自我认知"（情绪管理、性格特质、价值观）
+    - **Current events**: If the week had notable news/trends, connect to personal experience
+    - **Habits & routines**: "关于习惯养成"（坚持、改变、系统）
+    - **Template prompts**: Use the built-in prompts from the template (5年后的生活、12个月庆祝什么、当下决定)
+  - Format as a question or opening statement, then leave space for the user to develop it
+  - Example:
+    ```
+    > [!summary]+ 本周思考方向
+    > 
+    > 本周在工作中多次遇到需要与不同部门协作的情况，这让我思考：有效的跨部门沟通需要哪些要素？我在这方面还有哪些可以改进的地方？
+    ```
+  - Mark this as a "思考方向提示" so the user knows it's a prompt, not a completed reflection
 
 ---
 
