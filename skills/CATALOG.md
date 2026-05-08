@@ -16,6 +16,12 @@ This catalog groups skills by purpose while keeping installation compatible with
 - Primary file: `skills/weekly-journal/SKILL.md`
 - Typical trigger: "帮我写 2026-W01 的周记", "生成本周周记", "写周记"
 
+### monthly-journal
+- Path: `skills/monthly-journal`
+- Summary: Generate structured monthly journals from daily journal files (skipping the weekly layer to avoid compounding information loss). Distills daily entries directly into monthly format (总结, 内容, 改进, 下月计划, 反思, 评估, 成就, 挑战, 感恩, 展望, 感想). AI infers 8-dimension life ratings (工作/健康/财务/娱乐/成长/家庭/朋友/伴侣) for user adjustment. Checks for existing blank monthly file first, then fills or creates.
+- Primary file: `skills/monthly-journal/SKILL.md`
+- Typical trigger: "帮我写 2024-02 的月记", "生成本月月记", "写月记"
+
 ### obsidian-note
 - Path: `skills/obsidian-note`
 - Summary: Generate structured Obsidian notes with correct YAML frontmatter and content sections for 7 note types: 影视, 书籍, 人际, 播客, 代码, 报告, 通用.
