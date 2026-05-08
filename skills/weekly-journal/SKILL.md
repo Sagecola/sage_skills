@@ -33,7 +33,7 @@ Weekly journals use ISO week format: `YYYY-Www.md`
 created: [Current datetime]
 modified: [Current datetime]
 tags:
-  - 工作
+  - 工作      # omit if no work content this week
   - 生活
   - 周记
 ---
@@ -163,6 +163,17 @@ Include all 7 days (Mon–Sun) regardless of whether daily journal files exist.
 
 This is the core transformation step. Daily journals are detailed and granular; weekly journals are distilled and synthesized. The key principle: **keep what matters, drop what doesn't**.
 
+### Pre-writing scan: find weekly patterns
+
+Before writing any section, scan across all daily files for:
+- **Mood arc**: Did energy/mood rise, fall, or stay flat? Was there a turning point?
+- **Sleep/fatigue signals**: Recurring mentions of tiredness, poor sleep, or high energy?
+- **Social density**: Socially rich week or isolated one?
+- **Work rhythm**: Focused and productive, or fragmented and reactive?
+- **Recurring themes**: Any topic, person, or concern that appeared on 3+ days?
+
+Use these patterns as invisible scaffolding — they inform tone and emphasis across all sections, not as a separate output. A week where mood crashed on Wednesday should feel different from a week that built momentum.
+
 ### What to DROP from daily journals
 
 These daily journal sections do NOT appear in the weekly journal:
@@ -180,6 +191,7 @@ These daily journal sections do NOT appear in the weekly journal:
 - Write ONE paragraph covering the week's main work themes and directions
 - Mention key projects, tasks, and collaborators
 - This is a narrative overview, not a list — capture the arc of the week
+- Open with a one-sentence "main thread" that names the week's core work focus: "本周工作的主线是 X。"
 - Example: "本周工作主要集中在 X 项目的推进上，完成了 Y 和 Z，并与[人名]就 W 进行了深入讨论。"
 
 **进展 (Progress)**
@@ -193,10 +205,12 @@ These daily journal sections do NOT appear in the weekly journal:
 - DROP: generic reflections ("要继续努力"), positive self-praise
 - KEEP: specific mistakes, process failures, actionable lessons
 - Bullet list, focus on what can be done differently
+- If no genuine improvement items exist, write `- 本周无明显改进事项` — do not invent weak entries to fill the section
 
 **下周计划 (Next Week Plan)**
 - Source: the last working day's "明日工作安排" + any forward-looking items mentioned during the week
 - Bullet list of next week's priorities, scheduled events, and goals
+- Mark the single most important item with `**[重点]**` prefix
 
 ### Life Section (生活)
 
@@ -211,6 +225,8 @@ These daily journal sections do NOT appear in the weekly journal:
 - Source: exercise mentions, diet comments, sleep/fatigue mentions across all days
 - Write as paragraph-style prose prefixed with `- `, covering exercise, diet, sleep, and any body signals worth noting
 - Note any patterns, concerns, or improvements
+- Include body signals worth noting (headaches, fatigue patterns, tension)
+- If last week's health was notably different, briefly note the comparison
 
 **社交 (Social)**
 - Source: all interpersonal interactions from "流水账" across the week
@@ -218,12 +234,14 @@ These daily journal sections do NOT appear in the weekly journal:
 - KEEP: meals with friends, meaningful conversations, new connections, group activities
 - Write as paragraph-style prose prefixed with `- `, use Obsidian links for people: `[[真名|昵称]]`
 - Capture the quality of connections, not just the events
+- Note frequency anomalies: someone you usually see but didn't, or an unexpected reconnection
 
 **成长 (Growth)**
 - Source: podcasts, books, articles, tools learned, realizations from "思绪" and "流水账"
 - KEEP: specific insights, new skills, knowledge gained, perspective shifts
 - DROP: generic "learned a lot" statements
 - Write as paragraph-style prose prefixed with `- `, be specific about what was learned and why it matters
+- If multiple learning inputs exist (podcasts, books, articles), look for connections — a shared theme or tension is more interesting than a list
 
 **娱乐 (Entertainment)**
 - Source: shows watched, games played, live streams, music, outings for fun
@@ -241,23 +259,12 @@ These daily journal sections do NOT appear in the weekly journal:
   - The title should name the topic (e.g., "记录生活有感", "个性", "关于驱动力")
   - Expand the thought: add context, reasoning, connections to other ideas
   - This should feel like genuine reflection, not a recap
-- **If no strong "思绪" exists this week**: offer a reflection prompt based on the week's content
-  - Suggested prompt directions (pick ONE that fits the week's themes):
-    - **Work-related**: "本周工作中遇到的挑战让我思考……"（关于问题解决、团队协作、专业成长）
-    - **Life balance**: "关于工作与生活的平衡"（时间管理、优先级、自我关怀）
-    - **Relationships**: "人际关系中的……"（沟通、边界、理解差异）
-    - **Learning**: "学习与成长"（知识输入输出、技能习得、认知升级）
-    - **Self-awareness**: "关于自我认知"（情绪管理、性格特质、价值观）
-    - **Current events**: If the week had notable news/trends, connect to personal experience
-    - **Habits & routines**: "关于习惯养成"（坚持、改变、系统）
-    - **Template prompts**: Use the built-in prompts from the template (5年后的生活、12个月庆祝什么、当下决定)
-  - Format as a question or opening statement, then leave space for the user to develop it
-  - Example:
-    ```
-    > [!summary]+ 本周思考方向
-    > 
-    > 本周在工作中多次遇到需要与不同部门协作的情况，这让我思考：有效的跨部门沟通需要哪些要素？我在这方面还有哪些可以改进的地方？
-    ```
+- **If no strong "思绪" exists this week**: use one of these angles (or any other that fits):
+    - **Trigger mode**: "这件事让我想到……" — follow the thread of one specific moment
+    - **Comparison mode**: "和上周/上个月相比……" — what has shifted?
+    - **Question mode**: pose one genuine open question the week raised, without forcing an answer
+    - **Emergent insight**: "有没有什么事情我没有写进日记，但现在回头看才意识到的？"
+    - Or freely pick any other angle that feels right for the week
   - Mark this as a "思考方向提示" so the user knows it's a prompt, not a completed reflection
 
 ---
@@ -298,11 +305,21 @@ Example: `./2026-W17.md`
 - Write in first person for personal sections
 - Be specific and concrete, not generic
 - If a section has no content, keep the header and write a brief honest note (e.g., "本周无特别运动记录")
+- **Sparse week**: if daily journals are thin (many days missing, or mostly "tired / nothing special"), let the output be proportionally shorter — a genuine short week is better than a padded one
 - Maintain Chinese for all section headers and structure
 - **Match the user's personal writing style** from the style profile
 - **Work section**: prefer bullet lists for 进展/改进/计划; paragraph for 内容
 - **Life section**: prefer paragraph narrative for 回顾/社交/成长; brief paragraph or bullets for 健康/娱乐; callout block for 思考
 - The 思考 section should feel like genuine reflection, not a summary — encourage depth over breadth
+
+### Anti-AI-smell rules
+
+1. **No opening meta-summaries**: Don't start sections with "本周……总体来说……" — start with the actual content
+2. **No closing affirmations**: Remove "期待下周继续努力" / "相信会越来越好" type endings
+3. **No symmetry padding**: Uneven sections are fine; don't add bullets just to balance
+4. **No vague positives**: Replace "收获颇丰" / "感触很深" / "受益匪浅" with the specific thing gained or felt
+5. **No transition filler**: Remove "总的来说，这周……" sentences that exist only to connect paragraphs
+6. **Emotion must be earned**: Only write emotional language (感动、感慨) when the daily journals contain the event that earned it
 
 ---
 
