@@ -251,12 +251,9 @@ These daily journal sections do NOT appear in the weekly journal:
 **思考 (Reflection)**
 - Source: the most interesting/deep item from "思绪" across the week — pick ONE topic
 - **If the user's daily journals have a strong "思绪"**: develop it into a callout block:
-  ```
-  > [!summary]+ [思考标题] #可选标签
-  > 
-  > 深度思考内容...
-  ```
-  - The title should name the topic (e.g., "记录生活有感", "个性", "关于驱动力")
+  - Use `> [!summary]+` for concise reflections — drawn from this week's diary, a few paragraphs of personal insight
+  - Use `> [!help]+` for deeper explorations — when a theme has been building across multiple weeks or the topic is rich enough to warrant quoting external material, structuring a multi-part argument, or going beyond personal feeling into broader questions. In continuous conversations the AI should have context from prior weeks to draw on
+  - The title should name the topic (e.g., "记录生活有感", "个性", "什么是恋爱的意义")
   - Expand the thought: add context, reasoning, connections to other ideas
   - This should feel like genuine reflection, not a recap
 - **If no strong "思绪" exists this week**: use one of these angles (or any other that fits):
