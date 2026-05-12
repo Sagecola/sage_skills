@@ -12,3 +12,6 @@ __pycache__/
 # Local runtime config
 scripts/targets.json
 .tmp-codex-targets.json
+
+# Local Claude runtime config
+.claude/settings.local.json
