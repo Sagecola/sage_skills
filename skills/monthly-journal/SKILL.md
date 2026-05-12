@@ -1,6 +1,6 @@
 ---
 name: monthly-journal
-description: "Generate monthly journal entries and monthly reviews directly from daily journal files. Use when the user asks to 写月记, 生成月记, 月度复盘, 本月总结, 这个月回顾, 根据日记整理月记, or consolidate a month into an Obsidian monthly note. Distill daily journals into a month-level note with 本月周记, 本月主线, 关键词, work review (保持 / 问题 / 尝试 / 里程碑), life review (生命之轮 / 高光 / 所幸 / 觉察 / 迁移 / 下月重点 / 本月回看). Use this instead of summarizing weekly journals when the goal is to preserve detail while identifying month-level patterns, texture, and action guidance."
+description: "Generate monthly journal entries and monthly reviews directly from daily journal files. Use when the user asks to 写月记, 生成月记, 月度复盘, 本月总结, 这个月回顾, 根据日记整理月记, or consolidate a month into an Obsidian monthly note. Distill daily journals into a month-level note with 本月周记, 本月主线, 关键词, work review (保持 / 问题 / 尝试 / 里程碑), life review (生命之轮 / 高光 / 所幸 / 觉察 / 迁移 / 下月重点 / 本月回看). Treat the monthly note as a map and strategy guide rather than an expanded weekly summary: preserve detail, identify month-level patterns, and write from a cross-week perspective."
 ---
 
 # Monthly Journal Generator
@@ -89,10 +89,13 @@ Style profile template reference: [references/.monthly-style.md](references/.mon
 2. If the user says "this month" or gives no date, use the current date.
 3. Compute the first and last day of that month.
 4. Compute which ISO weeks overlap with the target month for the index section.
+5. Count how many days of each overlapping ISO week fall inside the target month.
 
 **ISO week calculation reference:**
 - A month usually overlaps 4–5 ISO weeks
 - Example: `2024-12` overlaps `2024-W48` to `2025-W01`
+- For the `本月周记` index, prefer **主体周**: keep weeks where the majority of days belong to the target month
+- Example: `2024-W48` has only one day in December, so it belongs more naturally to `2024-11` than `2024-12`
 
 ## Step 1: Locate Daily Journal Files
 
@@ -118,6 +121,19 @@ The monthly journal should answer:
 - What patterns kept repeating?
 - What is worth carrying into next month?
 
+### Perspective hierarchy
+
+Keep these three levels separate while writing:
+
+- **日记视角**: what happened today, how it felt today
+- **周记视角**: what repeated this week, what this week meant
+- **月记视角**: what defined this month, what stage I am in, what is becoming clear across multiple weeks
+
+Hard rule:
+- If a sentence only restates one isolated day or one isolated week without a month-level judgment, it does **not** belong in 月记核心栏目
+- `本月主线 / 觉察 / 本月回看` must all be written from the monthly perspective, not the weekly perspective
+- A good monthly note should feel like a person standing at month-end looking back over a whole stretch of life, not like a cleaner event summary
+
 ### What to DROP from daily journals
 
 These daily journal details should usually not be carried over directly:
@@ -135,6 +151,18 @@ Pay special attention to:
 - Repeated friction points
 - Specific moments that changed the month
 - Small but revealing life details that give the month texture
+
+### Output priority
+
+When tradeoffs appear, prioritize in this order:
+
+1. The monthly perspective is correct
+2. `本月主线` identifies what truly defined the month
+3. `觉察` captures one core cross-week pattern
+4. `本月回看` preserves the month's lived texture
+5. Section completeness and surface neatness
+
+Do not sacrifice monthly perspective just to make every section look equally full.
 
 ## Step 2: Learn Writing Style
 
@@ -167,10 +195,9 @@ If `.monthly-style.md` doesn't exist:
 
 ### 本月周记：
 
-List all overlapping ISO weeks as wikilinks:
+List only the weeks that are **mainly this month** as wikilinks:
 
 ```markdown
-### [[2024-W48]]
 ### [[2024-W49]]
 ### [[2024-W50]]
 ### [[2024-W51]]
@@ -184,6 +211,9 @@ This section is navigation only, not the content source.
 Write 3–5 sentences that answer:
 - What actually drove this month?
 - What was the lived main thread, not the intended goal?
+- What changed shape across multiple weeks?
+
+This section must sound like a month-end judgment, not an event list.
 
 Then add a separate keyword heading:
 
@@ -250,17 +280,20 @@ Use those patterns as hidden scaffolding.
 - Write 3–5 items
 - Can include events, turning points, relational shifts, emotional peaks, or especially memorable moments
 - If something feels like "best of the month", fold it into 高光 instead of creating a separate section
+- Prefer items that still matter when the month is viewed as a whole, not random memorable fragments
 
 #### 所幸
 - Source: daily "感恩", plus recurring people, tools, places, or fortunate turns
 - Write 3–5 selected items
 - This section is broader than gratitude: include what felt worth庆幸、感谢、珍惜
 - Use links naturally when relevant
+- Prefer people, supports, or moments that helped hold the month together
 
 #### 觉察
 - This is the most month-specific section
 - Write only **cross-week patterns or trends**
-- Use a single callout block
+- Use exactly **one** callout block
+- Build it around one main axis, but allow **2–4 related insights** inside the same callout when they clearly belong together
 - Let the title be generated freely based on the month's core insight
 - Example shape:
 
@@ -275,6 +308,7 @@ Use those patterns as hidden scaffolding.
   - What reliably restored me?
   - What started to shift this month?
   - What is becoming more true about me?
+- Bad 觉察 is either a pile of unrelated observations with no center, or several disconnected callouts
 
 #### 迁移
 - This is a month-end filter, not a wish list
@@ -293,6 +327,10 @@ Use those patterns as hidden scaffolding.
 - This section may be longer and more literary than the others
 - Use it to preserve the month's texture, atmosphere, and memorable fragments
 - It should feel like: "What did this month actually feel like?"
+- Format it as **one long bullet item**: start with a single `- `, then continue with multi-paragraph prose separated by blank lines
+- Make this usually the longest section in the note
+- Let concrete details serve the monthly feeling; do not turn it into a compressed timeline
+- If it reads like a project summary, work report, or recap of the above sections, it failed
 - Do **not** rewrite all of the above sections in longer form
 - Do **not** turn it into a daily timeline
 - Prefer thematic prose over bullet lists
@@ -324,6 +362,8 @@ Use those patterns as hidden scaffolding.
 - Maintain Chinese headings and structure
 - Preserve month-specific texture while still making decisions
 - Keep heading punctuation consistent with the template, including full-width `：`
+- For prose-heavy sections like 本月回看, keep the user's list habit by using one leading `- ` and continuing with paragraph breaks inside that same list item
+- Prefer the user's current mature monthly style over a more generic summarization style
 
 ### Anti-AI-smell rules
 
@@ -333,6 +373,9 @@ Use those patterns as hidden scaffolding.
 4. **Do not force symmetry** across sections
 5. **Do not end with generic optimism**
 6. **Let emotions be earned by concrete events**
+7. **Do not let 本月回看 collapse into a short recap**; it must preserve the month's texture
+8. **Do not split 觉察 into multiple unrelated callouts**
+9. **Do not mistake event density for monthly perspective**
 
 ## Example Usage
 
@@ -348,4 +391,4 @@ Use those patterns as hidden scaffolding.
 - Read daily journals directly instead of summarizing weekly journals
 - Check for `.monthly-style.md` first
 - Create a style profile on first use if helpful
-- The 本月周记索引 section should list all overlapping weeks, even if some files are missing
+- The 本月周记 section should prefer weeks that are mainly part of the target month, not every mechanically overlapping week
