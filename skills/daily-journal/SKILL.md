@@ -1,11 +1,11 @@
 ---
 name: daily-journal
-description: Generate daily journal entries from user's life content. Use when user wants to create a diary entry, write a journal, or document their daily activities. The skill transforms user's narrative into a structured journal format with work progress, reflections, emotions, gratitude, and thoughts sections.
+description: Generate daily journal entries from user's life content. Use when user wants to create a diary entry, write a journal, or quickly capture daily activities, emotions, and stray thoughts. The skill treats daily journals as micro-level, high-frequency notes: preserve facts, feelings, and fragments with light structure, without forcing deep synthesis.
 ---
 
 # Daily Journal Generator
 
-Generate structured daily journal entries from user's life content using a predefined template.
+Generate structured daily journal entries from user's life content using a predefined template. The daily journal is a low-friction capture surface: first preserve what happened, what was felt, and what briefly crossed the mind.
 
 ## Quick Start
 
@@ -141,6 +141,12 @@ Analyze the user's narrative and extract:
 - Random thoughts
 - Quick notes
 
+Daily-level principle:
+- Preserve raw material before interpreting it
+- Keep detail that may become useful later, even if it feels minor today
+- Do not force every emotion or thought into a complete lesson, but when an emotion is strong, it is appropriate to unpack why it mattered. Coping, prevention, and acceptance prompts are mainly for negative emotions.
+- `思绪` is for present-tense fragments, sudden associations, and half-formed ideas
+
 ### Step 2: Replace Templater Syntax
 
 Replace Obsidian Templater syntax with actual values:
@@ -161,12 +167,12 @@ Map extracted information to template sections:
 
 **Life Section:**
 - Record meaningful life details under "流水账"
-- Describe emotions with format: "今天我感到 [情绪]，因为 [事件描述]" under "情绪"
+- Describe emotions with format: "今天我感到 [情绪]，因为 [事件描述]" under "情绪"; strong positive emotions can explore why they felt so good, while negative emotions may also include coping, prevention, or acceptance
   - Available emotion tags: #开心 #充实 #惊喜 #得意 #暖心 #平静 #难过 #烦躁 #迷惘 #孤独 #生气 #尴尬 #委屈 #甜蜜 #梦境 #疲惫 #逃避 #不知道
 - Write gratitude items with format: "今天我感激 [人或事]，因为 [具体原因]。这让我意识到 [个人感悟]" under "感恩"
 - List achievements under "成就"
-- Reflect on choices and their impact under "反思"
-- Write free-form thoughts under "思绪"
+- Reflect on choices and their impact under "反思" only when the user supplied enough material; otherwise keep it brief
+- Write free-form, unfinished thoughts under "思绪"
 - Add quick notes under "Memos"
 
 ### Step 4: Apply Writing Style and Add Cross-References
@@ -216,6 +222,7 @@ Example filename: `./2026-01-26.md` (saved in current directory)
 - **Match the user's personal writing style** learned from recent journals (tone, vocabulary, sentence structure)
 - **Add cross-references** to related previous entries when naturally relevant
 - Use natural, conversational tone that reflects the user's voice
+- Daily journals should feel like a record and release valve, not a polished retrospective
 
 ## Example Usage
 

@@ -1,11 +1,11 @@
 ---
 name: weekly-journal
-description: Generate weekly journal entries from user's life content or daily journal files. Use when user wants to create a weekly review, write a weekly summary, or consolidate the week's work and life. The skill transforms user's narrative (or daily journals) into a structured weekly format with work summary, life review, growth, and deep reflection sections. Knows how to distill daily journal entries (流水账, 情绪, 感恩, 成就, 复盘, 思绪) into the weekly format (内容, 进展, 改进, 计划, 回顾, 健康, 社交, 成长, 娱乐, 思考).
+description: Generate weekly journal entries from user's life content or daily journal files. Use when user wants to create a weekly review, write a weekly summary, or consolidate the week's work and life. The skill treats weekly journals as mid-level filters: screen daily details, identify repeated problems, valuable events, and emotional patterns, then turn "what happened" into "what this week means." Knows how to distill daily journal entries (流水账, 情绪, 感恩, 成就, 复盘, 思绪) into the weekly format (内容, 进展, 改进, 计划, 回顾, 健康, 社交, 成长, 娱乐, 思考).
 ---
 
 # Weekly Journal Generator
 
-Generate structured weekly journal entries from user's life content or daily journal files, following the user's personal conventions.
+Generate structured weekly journal entries from user's life content or daily journal files, following the user's personal conventions. The weekly journal is a sieve and first-pass synthesis layer: it filters detail, names patterns, and develops one meaningful thought from the week.
 
 ## Quick Start
 
@@ -101,6 +101,13 @@ Daily journals are raw and granular. Your job is to **distill, not transcribe**.
 - **思考部分**: Which single thought from the week deserves to be developed further?
 
 The weekly journal should read like a thoughtful retrospective written by the person themselves — not a summary report of their diary.
+
+Weekly-level principle:
+- Start from the week, not from a universal life prompt
+- Keep repeated signals, meaningful events, and obvious emotional patterns
+- Drop daily noise unless it reveals a weekly pattern
+- `思考` should grow from this week's materials, especially repeated `思绪`
+- Broad life-direction questions are valid as fallback prompts when this week's material does not surface an obvious thought
 
 ---
 
@@ -253,7 +260,7 @@ These daily journal sections do NOT appear in the weekly journal:
 - **If the user's daily journals have a strong "思绪"**: develop it into a callout block:
   - Use `> [!summary]+` for concise reflections — drawn from this week's diary, a few paragraphs of personal insight
   - Use `> [!help]+` for deeper explorations — when a theme has been building across multiple weeks or the topic is rich enough to warrant quoting external material, structuring a multi-part argument, or going beyond personal feeling into broader questions. In continuous conversations the AI should have context from prior weeks to draw on
-  - The title should name the topic (e.g., "记录生活有感", "个性", "什么是恋爱的意义")
+  - Generate the callout title from the reflection content after deciding what to write; it should name the actual topic, not reuse a fixed prompt
   - Expand the thought: add context, reasoning, connections to other ideas
   - This should feel like genuine reflection, not a recap
 - **If no strong "思绪" exists this week**: use one of these angles (or any other that fits):
