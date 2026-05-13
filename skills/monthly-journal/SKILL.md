@@ -327,8 +327,20 @@ Use those patterns as hidden scaffolding.
 - This section may be longer and more literary than the others
 - Use it to preserve the month's texture, atmosphere, and memorable fragments
 - It should feel like: "What did this month actually feel like?"
+- Treat it as a note to the future self, not as a second summary section
 - Format it as **one long bullet item**: start with a single `- `, then continue with multi-paragraph prose separated by blank lines
 - Make this usually the longest section in the note
+- Open with **one concrete scene, object, or moment** instead of a summary sentence
+- Good openings feel like: entering through a meal, a room, a device, a conversation, a late-night state, or a specific piece of weather
+- Avoid openings like "这个月的工作主要围绕……" or any direct recap sentence
+- In the middle, follow only **2-3 interwoven lines** that actually carried the month
+- Let work and life cross naturally inside those lines; do not expand section-by-section in the order of 工作 / 健康 / 关系 / 娱乐
+- Move between paragraphs by emotion, time, or lived context, not by mechanical transitions like "另外", "此外", or "生活上"
+- For selection, prefer emotional arcs, recurring people, and changes that stretched across multiple weeks
+- Drop pure work流水, score explanations, and points already fully covered in 里程碑 or 高光 unless 回看 deepens them
+- Allow omission; this section does not need to cover everything
+- End with some aftertaste rather than a neat conclusion: echo the opening, leave an unanswered question, or keep a sense of being still on the way
+- Avoid closers like "总的来说" or "总而言之"
 - Let concrete details serve the monthly feeling; do not turn it into a compressed timeline
 - If it reads like a project summary, work report, or recap of the above sections, it failed
 - Do **not** rewrite all of the above sections in longer form
@@ -356,7 +368,7 @@ Use those patterns as hidden scaffolding.
 ## Writing Guidelines
 
 - Keep the original section structure intact
-- Write in first person for personal sections
+- Write in first person for personal sections; prefer `我` over instructional `你`
 - Be specific and concrete
 - Sparse months can stay short; do not pad
 - Maintain Chinese headings and structure
@@ -376,6 +388,8 @@ Use those patterns as hidden scaffolding.
 7. **Do not let 本月回看 collapse into a short recap**; it must preserve the month's texture
 8. **Do not split 觉察 into multiple unrelated callouts**
 9. **Do not mistake event density for monthly perspective**
+10. **Do not start 本月回看 with a summary opener when a concrete scene can carry the month better**
+11. **Do not force 本月回看 to cover every life area**
 
 ## Example Usage
 
