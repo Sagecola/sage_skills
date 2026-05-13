@@ -18,6 +18,7 @@ Current skills are documented in [skills/CATALOG.md](skills/CATALOG.md).
 Example:
 - `daily-journal`: generate structured daily journal entries from raw life notes, with optional style profile learning and cross-entry references.
 - `weekly-journal`: synthesize a week's daily journals into a structured weekly review — distills 流水账/情绪/感恩/成就 into 内容/进展/改进/回顾/成长/思考. Triggered by "帮我写 2026-W01 的周记"; auto-locates daily files and fills or creates the weekly file.
+- `monthly-journal`: distill daily journals directly into a month-level note — 本月主线/关键词, work review (保持/问题/尝试/里程碑), life review (生命之轮/高光/所幸/觉察/迁移/本月回看). Treats the monthly note as a map and strategy guide rather than a bigger weekly summary.
 - `chinese-typeset-polish`: polish Chinese/mixed-language writing with consistent typesetting rules and minimal semantic edits.
 - `obsidian-note`: generate structured Obsidian notes with correct YAML frontmatter for 7 note types — media, book, person, podcast, code, report, and general.
 
