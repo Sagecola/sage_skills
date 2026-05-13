@@ -18,7 +18,7 @@ This catalog groups skills by purpose while keeping installation compatible with
 
 ### monthly-journal
 - Path: `skills/monthly-journal`
-- Summary: Generate structured monthly journals from daily journal files (skipping the weekly layer to avoid compounding information loss). Distills daily entries directly into monthly format (总结, 内容, 改进, 下月计划, 反思, 评估, 成就, 挑战, 感恩, 展望, 感想). AI infers 8-dimension life ratings (工作/健康/财务/娱乐/成长/家庭/朋友/伴侣) for user adjustment. Checks for existing blank monthly file first, then fills or creates.
+- Summary: Generate structured monthly journals from daily journal files (skipping the weekly layer to avoid compounding information loss). Distills daily entries directly into monthly format: 本月索引 (本周周记 / 本月主线 / 关键词), work review (保持 / 问题 / 尝试 / 里程碑), life review (生命之轮 / 高光 / 所幸 / 觉察 / 迁移 / 下月重点 / 本月回看). Treats the monthly note as a map and strategy guide rather than an expanded weekly summary. Checks for existing blank monthly file first, then fills or creates.
 - Primary file: `skills/monthly-journal/SKILL.md`
 - Typical trigger: "帮我写 2024-02 的月记", "生成本月月记", "写月记"
 

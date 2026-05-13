@@ -258,8 +258,8 @@ These daily journal sections do NOT appear in the weekly journal:
 **思考 (Reflection)**
 - Source: the most interesting/deep item from "思绪" across the week — pick ONE topic
 - **If the user's daily journals have a strong "思绪"**: develop it into a callout block:
-  - Use `> [!summary]+` for concise reflections — drawn from this week's diary, a few paragraphs of personal insight
-  - Use `> [!help]+` for deeper explorations — when a theme has been building across multiple weeks or the topic is rich enough to warrant quoting external material, structuring a multi-part argument, or going beyond personal feeling into broader questions. In continuous conversations the AI should have context from prior weeks to draw on
+  - Use `> [!summary]+` for concise reflections — drawn from this week's diary, a few paragraphs of personal insight; choose this when the thought can be expressed clearly in 2–3 paragraphs
+  - Use `> [!help]+` for deeper explorations — when the theme has been building across multiple weeks, or the topic requires quoting external material, structuring a multi-part argument, or going beyond personal feeling into broader questions. In continuous conversations the AI should have context from prior weeks to draw on
   - Generate the callout title from the reflection content after deciding what to write; it should name the actual topic, not reuse a fixed prompt
   - Expand the thought: add context, reasoning, connections to other ideas
   - This should feel like genuine reflection, not a recap
