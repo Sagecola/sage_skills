@@ -330,9 +330,12 @@ Use those patterns as hidden scaffolding.
 - Treat it as a note to the future self, not as a second summary section
 - Format it as **one long bullet item**: start with a single `- `, then continue with multi-paragraph prose separated by blank lines
 - Make this usually the longest section in the note
-- Open with **one concrete scene, object, or moment** instead of a summary sentence
-- Good openings feel like: entering through a meal, a room, a device, a conversation, a late-night state, or a specific piece of weather
+- Prefer opening from a **month-end judgment sentence** that names the overall feel, shape, or tension of the month, then move into concrete scenes and details
+- Good openings feel like: "`X 月很像……`", "`X 月给我的感觉，像是……`", "`这个月最明显的底色是……`", "`如果要给这个月找一个质地，它更像……`"
+- The opening may contain a concrete image, but it should still sound like someone standing at month-end looking back over the whole month
 - Avoid openings like "这个月的工作主要围绕……" or any direct recap sentence
+- Avoid defaulting to time-sequence hooks like "X 月是从……开始的" / "这个月是从……开始的" / "一开始……后来……" as the main opening pattern; they easily collapse into timeline narration
+- A time-sequence opening is still allowed when that starting scene genuinely defines the whole month, but the section must pivot quickly back to month-level judgment instead of walking forward as a timeline
 - In the middle, follow only **2-3 interwoven lines** that actually carried the month
 - Let work and life cross naturally inside those lines; do not expand section-by-section in the order of 工作 / 健康 / 关系 / 娱乐
 - Move between paragraphs by emotion, time, or lived context, not by mechanical transitions like "另外", "此外", or "生活上"
@@ -345,6 +348,7 @@ Use those patterns as hidden scaffolding.
 - If it reads like a project summary, work report, or recap of the above sections, it failed
 - Do **not** rewrite all of the above sections in longer form
 - Do **not** turn it into a daily timeline
+- Do **not** build the whole section around one kickoff scene and then walk month events forward in order by default; the scene should usually be an entry point or supporting texture, not the whole structure
 - Prefer thematic prose over bullet lists
 
 ## Step 5: Apply Writing Style and Cross-References
@@ -390,6 +394,7 @@ Use those patterns as hidden scaffolding.
 9. **Do not mistake event density for monthly perspective**
 10. **Do not start 本月回看 with a summary opener when a concrete scene can carry the month better**
 11. **Do not force 本月回看 to cover every life area**
+12. **Do not default to "X 月是从……开始的"**; prefer a month-end qualitative judgment, while still allowing exceptions when that opening truly carries the whole month
 
 ## Example Usage
 

@@ -1,6 +1,6 @@
 ---
 name: daily-journal
-description: Generate daily journal entries from user's life content. Use when user wants to create a diary entry, write a journal, or quickly capture daily activities, emotions, and stray thoughts. The skill treats daily journals as micro-level, high-frequency notes: preserve facts, feelings, and fragments with light structure, without forcing deep synthesis.
+description: "Generate daily journal entries from user's life content. Use when user wants to create a diary entry, write a journal, or quickly capture daily activities, emotions, and stray thoughts. The skill treats daily journals as micro-level, high-frequency notes: preserve facts, feelings, and fragments with light structure, without forcing deep synthesis."
 ---
 
 # Daily Journal Generator
@@ -28,21 +28,22 @@ tags:
   - 工作
   - 生活
 ---
+
 << [[previous-day]] | [[next-day]] >>
 
 ## 工作
-### 成果和进展
-### 明日工作安排
-### 复盘
+### 成果和进展：
+### 明日工作安排：
+### 复盘：
 
 ## 生活
-### 流水账
-#### 情绪
-#### 感恩
-#### 成就
-### 反思
-### 思绪
-### Memos
+### 流水账：
+#### 情绪：
+#### 感恩：
+#### 成就：
+### 反思：
+### 思绪：
+### Memos：
 ```
 
 Full template reference: [references/template.md](references/template.md)
@@ -96,8 +97,8 @@ If `.journal-style.md` doesn't exist:
 - 情绪表达：[直接/含蓄]
 
 ## 常用表达
-- 口头禅：[列出常用词汇，如"哈哈"、"咔咔"、"挺"等]
-- 语气词：[列出，如"嘛"、"呢"、"啊"等]
+- 口头禅：[列出常用词汇，如“哈哈”“就是说”“确实”等]
+- 语气词：[列出，如“啊”“呢”“吧”等]
 - 特色表达：[列出独特的表达方式]
 
 ## 句式特点
@@ -115,9 +116,9 @@ If `.journal-style.md` doesn't exist:
 - [列出任何特殊的写作习惯或偏好]
 
 ## 示例句子
-- 工作：[1-2个典型句子]
-- 生活：[1-2个典型句子]
-- 情绪：[1-2个典型句子]
+- 工作：[1-2 个典型句子]
+- 生活：[1-2 个典型句子]
+- 情绪：[1-2 个典型句子]
 ```
 
 **Token Efficiency:**
@@ -151,10 +152,10 @@ Daily-level principle:
 
 Replace Obsidian Templater syntax with actual values:
 
-- `<% tp.file.creation_date() %>` → Current datetime (e.g., "2026-01-26 14:30")
-- `<% tp.file.last_modified_date() %>` → Current datetime
-- `<% tp.date.now("YYYY-MM-DD", -1) %>` → Previous day (e.g., "2026-01-25")
-- `<% tp.date.now("YYYY-MM-DD", 1) %>` → Next day (e.g., "2026-01-27")
+- `<% tp.file.creation_date() %>` -> Current datetime (e.g., "2026-01-26 14:30")
+- `<% tp.file.last_modified_date() %>` -> Current datetime
+- `<% tp.date.now("YYYY-MM-DD", -1) %>` -> Previous day (e.g., "2026-01-25")
+- `<% tp.date.now("YYYY-MM-DD", 1) %>` -> Next day (e.g., "2026-01-27")
 
 ### Step 3: Fill Content
 
@@ -167,9 +168,9 @@ Map extracted information to template sections:
 
 **Life Section:**
 - Record meaningful life details under "流水账"
-- Describe emotions with format: "今天我感到 [情绪]，因为 [事件描述]" under "情绪"; strong positive emotions can explore why they felt so good, while negative emotions may also include coping, prevention, or acceptance
-  - Available emotion tags: #开心 #充实 #惊喜 #得意 #暖心 #平静 #难过 #烦躁 #迷惘 #孤独 #生气 #尴尬 #委屈 #甜蜜 #梦境 #疲惫 #逃避 #不知道
-- Write gratitude items with format: "今天我感激 [人或事]，因为 [具体原因]。这让我意识到 [个人感悟]" under "感恩"
+- Describe emotions with format: "今天我感到[情绪]，因为[事件描述]" under "情绪"; strong positive emotions can explore why they felt so good, while negative emotions may also include coping, prevention, or acceptance
+  - Available emotion tags: `#开心 #充实 #惊喜 #得意 #暖心 #平静 #难过 #烦躁 #迷茫 #孤独 #生气 #疲惫 #委屈 #甜蜜 #梦幻 #低落 #逃避 #不知所措`
+- Write gratitude items with format: "今天我感谢[人或事]，因为[具体原因]。这让我意识到[个人感悟]" under "感恩"
 - List achievements under "成就"
 - Reflect on choices and their impact under "反思" only when the user supplied enough material; otherwise keep it brief
 - Write free-form, unfinished thoughts under "思绪"
@@ -227,7 +228,7 @@ Example filename: `./2026-01-26.md` (saved in current directory)
 ## Example Usage
 
 **User input:**
-"今天完成了项目的核心功能开发，修复了3个bug。明天计划进行测试。工作上感觉很有成就感。晚上和朋友吃饭，聊得很开心。我感激朋友的陪伴，让我感到温暖。"
+"今天完成了项目的核心功能开发，修复了 2 个 bug。明天计划进行测试。工作上感觉很有成就感。晚上和朋友吃饭，聊得很开心。我很感激朋友的陪伴，让我感到温暖。"
 
 **Generated journal** (saved as 2026-01-26.md):
 ```markdown
@@ -245,7 +246,7 @@ tags:
 
 ### 成果和进展：
 - 完成了项目的核心功能开发
-- 修复了3个bug
+- 修复了 2 个 bug
 
 ### 明日工作安排：
 - 进行项目测试
@@ -263,16 +264,16 @@ tags:
 - 今天我感到开心，因为工作完成得很顺利，晚上和朋友的聚会也很愉快。
 
 #### 感恩：
-1. 今天我感激朋友的陪伴，因为让我感到温暖。这让我意识到友情的珍贵。
+1. 今天我感谢朋友的陪伴，因为这让我感到温暖。这让我意识到友情的珍贵。
 
 #### 成就：
 1. 完成项目核心功能开发
 
 ### 反思：
-- 今天工作和生活都很充实，平衡得不错
+- 今天工作和生活都很充实，平衡得不错。
 
 ### 思绪：
-- 工作带来的成就感和朋友的陪伴，都是生活中重要的部分
+- 工作带来的成就感和朋友的陪伴，都是生活里重要的部分。
 
 ### Memos：
 - 继续保持工作和生活的平衡
