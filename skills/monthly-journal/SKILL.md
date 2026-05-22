@@ -191,6 +191,34 @@ If `.monthly-style.md` doesn't exist:
 
 **If no monthly journals or profile exist**: use neutral, natural style based on the user's input tone.
 
+## Step 2.5: Read Recent Months for Continuity and Emphasis
+
+Before drafting the month, do a quick recent-month pass:
+
+1. If 2–3 recent monthly journals are available, skim them.
+2. Note both:
+   - **formal repetition**: opener families, paragraph rhythm, which sections expanded the most, repeated transition habits
+   - **continuity signals**: recurring themes, unresolved tensions, repeated friction, habits that are stabilizing, and changes that may only become visible across several months
+3. Use the recent months in two ways:
+   - to avoid writing this month in the exact same shape again
+   - to sharpen what this month continues, breaks, confirms, or finally changes
+4. If the recent months feel too similar, deliberately vary at least one of:
+   - the opening move of `本月回看`
+   - which 1–2 sections stay thin
+   - which section carries the month's emotional weight
+   - how many themes the month actually covers
+5. Do not vary for novelty alone; vary only when a different shape fits this month better.
+6. Do not let the recent months hijack the current one; use them as background contrast, not as extra content that must be copied forward.
+
+Before filling sections, decide privately:
+- the dominant driver of the month
+- what this month is continuing, what it is interrupting, and what has become clearer only when compared with recent months
+- the 2–3 lines worth expanding in `本月回看`
+- which sections should remain intentionally thin
+- which section should carry the month's emotional weight
+
+These decisions are scaffolding only; do not print them as meta commentary or extra headings.
+
 ## Step 3: Build the Index Section
 
 ### 本月周记：
@@ -208,12 +236,22 @@ This section is navigation only, not the content source.
 
 ### 本月主线：
 
-Write 3–5 sentences that answer:
+Write **2–3 sentences** that answer:
 - What actually drove this month?
-- What was the lived main thread, not the intended goal?
-- What changed shape across multiple weeks?
+- What kept pulling time, attention, or energy back to the same place?
+- Did the center of gravity shift across multiple weeks?
 
-This section must sound like a month-end judgment, not an event list.
+This section is a **fact-layer synthesis**, not a mood-layer summary.
+
+Hard rules:
+- Name the month's actual driver, not the original plan
+- Prioritize recurring traction, drag, or re-centering over event density
+- When useful, use recent months as contrast: what is still continuing, what has shifted, what has finally stopped being true
+- If there was a secondary line, mention it only when it lasted across multiple weeks
+- Use concrete, directional language such as “围绕 / 牵引 / 卡在 / 转向 / 推进 / 来回拉扯”
+- Avoid metaphor, atmosphere words, and literary naming here; save those for `本月回看`
+- Do not write it as an event list
+- Do not write it as a month-end feeling judgment
 
 Then add a separate keyword heading:
 
@@ -235,8 +273,11 @@ Before writing, scan all daily files for:
 - What kept coming back on 3+ days
 
 Use those patterns as hidden scaffolding.
+Use the hidden emphasis decisions to allocate detail; do **not** fill every section to a similar thickness by default.
 
 ### Work Section (工作)
+
+- These sub-sections do not need equal density. Some months only one or two of them will carry real weight.
 
 #### 保持
 - Source: recurring strengths from "成果和进展" and "复盘"
@@ -264,6 +305,8 @@ Use those patterns as hidden scaffolding.
 
 ### Life Section (生活)
 
+- These sub-sections do not need equal density either. Let the month decide where the detail belongs.
+
 #### 生命之轮
 - Rate exactly these six dimensions:
   - 工作
@@ -277,23 +320,28 @@ Use those patterns as hidden scaffolding.
 - **This is AI-inferred** and should stay modest, concrete, and revisable
 
 #### 高光
-- Write 3–5 items
+- Write **2–5 items**
 - Can include events, turning points, relational shifts, emotional peaks, or especially memorable moments
 - If something feels like "best of the month", fold it into 高光 instead of creating a separate section
 - Prefer items that still matter when the month is viewed as a whole, not random memorable fragments
+- Keep each item to **2–3 sentences**
+- A scene is enough; do not expand into full narration
+- If only one or two moments still matter at month-end, stop there
 
 #### 所幸
 - Source: daily "感恩", plus recurring people, tools, places, or fortunate turns
-- Write 3–5 selected items
+- Write **2–5 selected items**
 - This section is broader than gratitude: include what felt worth庆幸、感谢、珍惜
 - Use links naturally when relevant
 - Prefer people, supports, or moments that helped hold the month together
+- This is one of the best places to keep personal warmth, so it may be slightly fuller than 高光
 
 #### 觉察
 - This is the most month-specific section
 - Write only **cross-week patterns or trends**
+- Recent months may help reveal the pattern, but the insight must still land in **this month**
 - Use exactly **one** callout block
-- Build it around one main axis, but allow **2–4 related insights** inside the same callout when they clearly belong together
+- Build it around one main axis, but allow **2–3 related insights** inside the same callout when they clearly belong together
 - Let the title be generated freely based on the month's core insight
 - Example shape:
 
@@ -317,9 +365,10 @@ Use those patterns as hidden scaffolding.
   - `停止`
   - `开始`
 - Keep them short and decision-oriented
+- Each bullet should usually be one sentence without explanation
 
 #### 下月重点
-- Write 1–3 real priorities
+- Write 1–2 real priorities; do not exceed 3
 - Avoid grand ambition
 - Prioritize directional clarity over completeness
 
@@ -331,24 +380,30 @@ Use those patterns as hidden scaffolding.
 - Format it as **one long bullet item**: start with a single `- `, then continue with multi-paragraph prose separated by blank lines
 - Make this usually the longest section in the note
 - Prefer opening from a **month-end judgment sentence** that names the overall feel, shape, or tension of the month, then move into concrete scenes and details
-- Good openings feel like: "`X 月很像……`", "`X 月给我的感觉，像是……`", "`这个月最明显的底色是……`", "`如果要给这个月找一个质地，它更像……`"
+- Good openings may be:
+  - a month-end judgment sentence such as "`X 月很像……`", "`X 月给我的感觉，像是……`", "`这个月最明显的底色是……`", "`如果要给这个月找一个质地，它更像……`"
+  - a concrete entry point such as a room, weather, object, line of dialogue, or scene that quickly turns back to the month's overall feeling
 - The opening may contain a concrete image, but it should still sound like someone standing at month-end looking back over the whole month
 - Avoid openings like "这个月的工作主要围绕……" or any direct recap sentence
+- Do not use the same opener family for three consecutive months; vary the opening rhythm when writing across months
 - Avoid defaulting to time-sequence hooks like "X 月是从……开始的" / "这个月是从……开始的" / "一开始……后来……" as the main opening pattern; they easily collapse into timeline narration
 - A time-sequence opening is still allowed when that starting scene genuinely defines the whole month, but the section must pivot quickly back to month-level judgment instead of walking forward as a timeline
 - In the middle, follow only **2-3 interwoven lines** that actually carried the month
 - Let work and life cross naturally inside those lines; do not expand section-by-section in the order of 工作 / 健康 / 关系 / 娱乐
-- Move between paragraphs by emotion, time, or lived context, not by mechanical transitions like "另外", "此外", or "生活上"
+- Do not give paragraphs topic labels or make each paragraph correspond to a fixed life category
+- Move between paragraphs by association, emotion, time, or lived context, not by mechanical transitions like "另外", "此外", or "生活上"
 - For selection, prefer emotional arcs, recurring people, and changes that stretched across multiple weeks
 - Drop pure work流水, score explanations, and points already fully covered in 里程碑 or 高光 unless 回看 deepens them
 - Allow omission; this section does not need to cover everything
-- End with some aftertaste rather than a neat conclusion: echo the opening, leave an unanswered question, or keep a sense of being still on the way
+- Allow sentence fragments, unresolved feelings, or a half-spoken stop if that suits the month
+- End with some aftertaste rather than a neat conclusion; do not force a callback to the opening
 - Avoid closers like "总的来说" or "总而言之"
 - Let concrete details serve the monthly feeling; do not turn it into a compressed timeline
 - If it reads like a project summary, work report, or recap of the above sections, it failed
 - Do **not** rewrite all of the above sections in longer form
 - Do **not** turn it into a daily timeline
 - Do **not** build the whole section around one kickoff scene and then walk month events forward in order by default; the scene should usually be an entry point or supporting texture, not the whole structure
+- Do **not** make every month cover the same number of themes
 - Prefer thematic prose over bullet lists
 
 ## Step 5: Apply Writing Style and Cross-References
@@ -375,6 +430,9 @@ Use those patterns as hidden scaffolding.
 - Write in first person for personal sections; prefer `我` over instructional `你`
 - Be specific and concrete
 - Sparse months can stay short; do not pad
+- Allow real month-to-month length differences; quiet months do not need to imitate dense months
+- Draft asymmetrically on purpose when the month itself was asymmetric
+- Let recent months provide contrast and continuity, but keep the center of gravity in the current month
 - Maintain Chinese headings and structure
 - Preserve month-specific texture while still making decisions
 - Keep heading punctuation consistent with the template, including full-width `：`
@@ -395,6 +453,10 @@ Use those patterns as hidden scaffolding.
 10. **Do not start 本月回看 with a summary opener when a concrete scene can carry the month better**
 11. **Do not force 本月回看 to cover every life area**
 12. **Do not default to "X 月是从……开始的"**; prefer a month-end qualitative judgment, while still allowing exceptions when that opening truly carries the whole month
+13. **Do not let 本月主线 and 本月回看 collapse into the same job**; 主线 answers “被什么牵引”, 回看 answers “是什么感觉”
+14. **Do not let every section become equally long**; rhythm matters as much as completeness
+15. **Do not let variety exist only at the sentence level**; vary emphasis, omission, and section weight across months
+16. **Do not turn recent months into imported filler**; use them to clarify the present month, not to dilute it
 
 ## Example Usage
 
