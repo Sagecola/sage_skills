@@ -1,0 +1,116 @@
+{
+  "skill_name": "file-organizer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我 Downloads 里有一堆文件：身份证扫描件.pdf、2025体检报告.pdf、Q4项目复盘.docx、obsidian-vault-backup.zip、IMG_20260501.jpg、unknown.dat。帮我整理到 D:\\OneDrive，但你先别动文件，先告诉我怎么分。",
+      "expected_output": "应先说明不会移动文件，输出分类计划表，包含原文件名、建议位置、判断依据、置信度、需要确认；身份证和体检报告归入 10_Identity，项目复盘归入工作项目或需确认项目名，vault 备份和图片按规则建议，unknown.dat 放入 00_Inbox 或需要确认。",
+      "files": [],
+      "expectations": [
+        "The response explicitly states that no files have been moved yet.",
+        "The response provides a classification plan before any move or rename action.",
+        "The classification plan includes the original filename, suggested location, reasoning, confidence level, and confirmation-needed status for each file or group.",
+        "身份证扫描件.pdf is classified under 10_Identity/11_Legal or an equivalent legal identity folder.",
+        "2025体检报告.pdf is classified under 10_Identity/14_Health or an equivalent health identity folder.",
+        "unknown.dat is not force-classified; it is placed in 00_Inbox or marked as needing user confirmation."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "这个文件叫 劳动合同最终版扫描.pdf，是我入职时签的合同，帮我按你的规则起个名字，并告诉我应该放哪。",
+      "expected_output": "应建议类似 YYYYMMDD_合同_入职劳动合同_v1.0.pdf 的文件名；文档类型必须使用控制词表中的“合同”；建议位置应是 10_Identity/13_Career/；如果日期未知，应说明用签署日期优先或暂用文件日期。",
+      "files": [],
+      "expectations": [
+        "The suggested filename follows the pattern YYYYMMDD_文档类型_核心标题[_v版本号].扩展名.",
+        "The document type in the suggested filename is 合同, not 劳动合同 or another custom type.",
+        "The suggested location is 10_Identity/13_Career or an equivalent career identity folder.",
+        "If the exact date is unknown, the response explains the date fallback instead of inventing a precise signing date.",
+        "The response gives a short reason for both the filename and the storage location."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "我有一个自己写的小工具项目，现在还在改；另一个 zip 是去年已经完成发布的版本备份。它们都算代码，应该放一个地方吗？",
+      "expected_output": "应区分进行中的代码项目和已完成作品/备份：正在改的小工具归入 30_Projects/33_Personal/{项目名}/，已完成发布版本可归入 50_Assets/52_Creations/ 或 99_Archive，说明生命周期差异。",
+      "files": [],
+      "expectations": [
+        "The response says the active tool project and the completed release backup should not automatically go in the same folder.",
+        "The active project is classified under 30_Projects/33_Personal or an equivalent active personal project folder.",
+        "The completed release backup is classified under 50_Assets/52_Creations, 99_Archive, or asks a clarifying question between those two based on future use.",
+        "The response explains the lifecycle distinction between active projects and completed assets or archives.",
+        "The response asks for a project name if it cannot infer the exact subfolder."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "帮我看看这些文件怎么处理：护照首页.jpg、银行卡照片.png、房租合同.pdf、报税记录2024.xlsx。注意我不想把隐私内容贴出来。",
+      "expected_output": "应明确只读取最小必要信息，不复述敏感号码或住址；护照归入 10_Identity/11_Legal，银行卡照片归入 10_Identity/15_Finance，房租合同可能归入 20_Areas/23_Housing_Mgmt 或 10_Identity 视用途说明，报税记录归入 20_Areas/21_Finance_Mgmt。",
+      "files": [],
+      "expectations": [
+        "The response explicitly says it will avoid exposing sensitive details and only use minimum necessary information.",
+        "The response does not repeat or invent passport numbers, bank card numbers, addresses, medical details, or other sensitive identifiers.",
+        "护照首页.jpg is classified under 10_Identity/11_Legal or an equivalent legal identity folder.",
+        "银行卡照片.png is classified under 10_Identity/15_Finance or an equivalent finance identity folder.",
+        "报税记录2024.xlsx is classified under 20_Areas/21_Finance_Mgmt or an equivalent finance management folder.",
+        "房租合同.pdf is either classified with a clear rationale or marked for confirmation if its usage context is ambiguous."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "我之前已经按自己的习惯整理过 D:\\OneDrive 了，比如论文都放在 40_Knowledge\\论文\\方向名，不是 42_Library。现在新下载了三篇水处理论文和一个项目会议纪要，帮我看看应该放哪，不要重新整理整个盘。",
+      "expected_output": "应先说明会尊重现有结构，只查看相关区域；论文应优先建议放入用户已有的 40_Knowledge/论文/水处理 或相近方向目录，而不是机械改成 42_Library；会议纪要应根据是否属于工作项目建议 30_Projects/31_Work/{项目名}/，并询问项目名；不应提出全盘重构。",
+      "files": [],
+      "expectations": [
+        "The response explicitly respects the user's existing structure instead of forcing the built-in 42_Library path.",
+        "The water treatment papers are suggested for 40_Knowledge/论文/水处理 or a closely matching existing topic folder.",
+        "The response does not propose reorganizing the whole drive.",
+        "The project meeting notes are suggested for 30_Projects/31_Work/{项目名} or the response asks for the project name.",
+        "The response says it only needs to inspect relevant existing folders or samples, not the entire archive."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "我确认要移动这些文件了。请你先给我一个移动计划清单：C:\\Users\\me\\Downloads\\身份证扫描件.pdf 放到 D:\\OneDrive\\10_Identity\\11_Legal，C:\\Users\\me\\Downloads\\unknown.dat 你还不确定。",
+      "expected_output": "应输出移动计划清单，包含操作、源路径、目标路径、冲突状态、备注；身份证文件可以列为 move，unknown.dat 应列为 skip 或 ask，不应直接移动；应要求用户再次确认后再执行。",
+      "files": [],
+      "expectations": [
+        "The response outputs a move plan table before executing any move.",
+        "The move plan table includes columns equivalent to 操作, 源路径, 目标路径, 冲突状态, and 备注.",
+        "The known identity file is listed as a move action with full source and destination paths.",
+        "unknown.dat is listed as skip or ask, not as a confirmed move action.",
+        "The response asks for confirmation before executing the move plan."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "我只在 Windows 上用。测试时中文经常被 AI 读成乱码，所以你读取中文 txt/md/csv 时要注意 UTF-8。另外整理 C:\\Users\\me\\Downloads\\新建文件夹 里的文件前，先问我是移动还是复制；如果我选移动，移动完这个文件夹空了就删掉空目录。",
+      "expected_output": "应说明 Windows 读取中文文本时会显式使用 UTF-8；执行前应询问移动还是复制；移动模式下应在计划里说明只清理本次移动后变空的源目录，不删除非空目录；复制模式下不清理源目录。",
+      "files": [],
+      "expectations": [
+        "The response says Windows text reads should explicitly use UTF-8 for Chinese txt, md, csv, or similar files.",
+        "The response says mojibake should be retried with UTF-8 before judging the file as damaged.",
+        "The response asks the user to choose move or copy before executing file operations.",
+        "The response explains that copy mode keeps the original files and does not clean the source directory.",
+        "The response explains that move mode may clean empty source directories created by this operation.",
+        "The response states that only empty directories are deleted and non-empty directories are never deleted.",
+        "The response limits empty directory cleanup to source directories involved in the current move operation."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "文件已经整理好了，下一步我可能想统一重命名。里面有 妈妈体检报告.pdf、项目方案v2.docx、项目复盘最终版.docx。你先给我重命名建议，不要直接改名。",
+      "expected_output": "应先询问或输出重命名计划，并明确确认前不会改名；妈妈体检报告应使用控制词表中的 病历 类型并考虑使用 @妈妈，不能因为文件名有“报告”就选 报告；项目方案v2 应考虑使用 _v2.0；项目复盘最终版如果没有数字版本，应使用 &终稿 或类似备注而不是硬编版本号；应等待用户确认后才执行。",
+      "files": [],
+      "expectations": [
+        "The response explicitly states that it will not rename files before user confirmation.",
+        "The response provides a rename plan rather than executing Rename-Item or claiming the files were renamed.",
+        "The rename plan includes current path or current filename and suggested new filename.",
+        "妈妈体检报告.pdf uses the controlled document type 病历, not 报告.",
+        "妈妈体检报告.pdf uses @妈妈 or clearly explains why the ownership field is not used.",
+        "项目方案v2.docx uses a normalized version field such as _v2 or _v2.0.",
+        "项目复盘最终版.docx uses a remark such as &终稿, &定稿, or equivalent instead of inventing a numeric version.",
+        "The response asks the user to confirm which proposed names should be applied."
+      ]
+    }
+  ]
+}

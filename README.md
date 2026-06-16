@@ -22,6 +22,7 @@ Example:
 - `chinese-typeset-polish`: polish Chinese/mixed-language writing with consistent typesetting rules and minimal semantic edits.
 - `obsidian-note`: generate structured Obsidian notes with correct YAML frontmatter for 7 note types — media, book, person, podcast, code, report, and general.
 - `daylog`: generate readable daily summaries and diary material from AI coding assistant conversation history (Codex, Claude Code, Kimi Code, opencode) and browser history. Outputs narrative-style work logs or diary drafts.
+- `file-organizer`: personal file organization assistant for naming, classifying, and safely archiving messy files into a structured system. Safety-first workflow: inspect, plan, confirm, then act.
 - `ammonia-tower-design`: ammonia nitrogen stripping and absorption packed-tower design workflow for wastewater treatment. Includes tower diameter, packing height, packing comparison, wetting/circulation checks, and Onda mass-transfer sizing with HG/T 3986-2016 and HG/T 4374-2012 packing data.
 
 ## Repository Layout
@@ -83,6 +84,11 @@ For Obsidian notes:
 For work logging:
 ```powershell
 ./scripts/install-skills.ps1 -SkillName daylog
+```
+
+For file organization:
+```powershell
+./scripts/install-skills.ps1 -SkillName file-organizer
 ```
 
 For engineering calculations:

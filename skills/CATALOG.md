@@ -34,6 +34,12 @@ This catalog groups skills by purpose while keeping installation compatible with
 - Primary file: `skills/chinese-typeset-polish/SKILL.md`
 - Typical trigger: "中文排版优化", "润色这段文案", "处理中英混排", "按规范整理这篇文章"
 
+### file-organizer
+- Path: `skills/file-organizer`
+- Summary: Personal file organization assistant for naming, classifying, and safely archiving messy files into the "人生档案馆" system. Safety-first workflow: inspect first, present classification plan, wait for confirmation, then move or rename.
+- Primary file: `skills/file-organizer/SKILL.md`
+- Typical trigger: "帮我整理文件", "这个文件放哪", "Downloads 好乱", "帮我分类", "按规则重命名"
+
 ### daylog
 - Path: `skills/daylog`
 - Summary: Generate readable daily summaries and diary material from local AI coding assistant conversation history and browser history. Extracts raw logs from Codex, Claude Code, Kimi Code CLI, and opencode, then writes narrative summaries. Supports migration from backup data on another computer.
