@@ -1,4 +1,4 @@
-﻿# sage_skills
+# sage_skills
 
 由 [Sagecola](https://github.com/Sagecola) 维护的可复用技能库。
 
@@ -21,6 +21,8 @@
 - `monthly-journal`：将日记直接蒸馏为月记，包含本月主线/关键词、工作复盘（保持/问题/尝试/里程碑）、生活回顾（生命之轮/高光/所幸/觉察/迁移/本月回看）。月记是地图与战略指南，不是更长的周记。
 - `chinese-typeset-polish`：按中文与中英混排规范进行排版优化，并做最小化润色。
 - `obsidian-note`：生成带有规范 YAML frontmatter 的 Obsidian 笔记，支持影视、书籍、人际、播客、代码、报告、通用共 7 种笔记类型。
+- `daylog`：从 AI 编程助手对话记录（Codex、Claude Code、Kimi Code、opencode）和浏览器历史生成可读的每日摘要和日记素材。输出叙事风格的工作日志或日记草稿。
+- `ammonia-tower-design`：氨氮废水两段式吹脱+吸收填料塔工程计算。包含塔径、填料高度、填料对比、润湿/循环校核、Onda 传质计算，内置 HG/T 3986-2016 和 HG/T 4374-2012 填料数据。
 
 ## 目录结构
 
@@ -76,6 +78,16 @@ Copy-Item ./scripts/targets.example.json ./scripts/targets.json
 安装 Obsidian 笔记技能：
 ```powershell
 ./scripts/install-skills.ps1 -SkillName obsidian-note
+```
+
+安装工作日志技能：
+```powershell
+./scripts/install-skills.ps1 -SkillName daylog
+```
+
+安装工程计算技能：
+```powershell
+./scripts/install-skills.ps1 -SkillName ammonia-tower-design
 ```
 
 仅安装到指定运行时：

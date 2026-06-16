@@ -1,4 +1,4 @@
-﻿# sage_skills
+# sage_skills
 
 Shared skill library by [Sagecola](https://github.com/Sagecola).
 
@@ -21,6 +21,8 @@ Example:
 - `monthly-journal`: distill daily journals directly into a month-level note — 本月主线/关键词, work review (保持/问题/尝试/里程碑), life review (生命之轮/高光/所幸/觉察/迁移/本月回看). Treats the monthly note as a map and strategy guide rather than a bigger weekly summary.
 - `chinese-typeset-polish`: polish Chinese/mixed-language writing with consistent typesetting rules and minimal semantic edits.
 - `obsidian-note`: generate structured Obsidian notes with correct YAML frontmatter for 7 note types — media, book, person, podcast, code, report, and general.
+- `daylog`: generate readable daily summaries and diary material from AI coding assistant conversation history (Codex, Claude Code, Kimi Code, opencode) and browser history. Outputs narrative-style work logs or diary drafts.
+- `ammonia-tower-design`: ammonia nitrogen stripping and absorption packed-tower design workflow for wastewater treatment. Includes tower diameter, packing height, packing comparison, wetting/circulation checks, and Onda mass-transfer sizing with HG/T 3986-2016 and HG/T 4374-2012 packing data.
 
 ## Repository Layout
 
@@ -76,6 +78,16 @@ For copywriting/typesetting:
 For Obsidian notes:
 ```powershell
 ./scripts/install-skills.ps1 -SkillName obsidian-note
+```
+
+For work logging:
+```powershell
+./scripts/install-skills.ps1 -SkillName daylog
+```
+
+For engineering calculations:
+```powershell
+./scripts/install-skills.ps1 -SkillName ammonia-tower-design
 ```
 
 Install to selected runtimes only:

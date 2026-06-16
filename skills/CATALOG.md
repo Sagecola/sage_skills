@@ -1,4 +1,4 @@
-﻿# Skill Catalog
+# Skill Catalog
 
 This catalog groups skills by purpose while keeping installation compatible with the current flat `skills/<name>` layout.
 
@@ -33,6 +33,20 @@ This catalog groups skills by purpose while keeping installation compatible with
 - Summary: Apply Chinese/mixed-language typesetting standards and light polishing with strict meaning preservation, rule priorities, and file-vs-dialog output modes.
 - Primary file: `skills/chinese-typeset-polish/SKILL.md`
 - Typical trigger: "中文排版优化", "润色这段文案", "处理中英混排", "按规范整理这篇文章"
+
+### daylog
+- Path: `skills/daylog`
+- Summary: Generate readable daily summaries and diary material from local AI coding assistant conversation history and browser history. Extracts raw logs from Codex, Claude Code, Kimi Code CLI, and opencode, then writes narrative summaries. Supports migration from backup data on another computer.
+- Primary file: `skills/daylog/SKILL.md`
+- Typical trigger: "查 AI 对话记录", "整理工作日志", "写日记素材", "summarize my coding sessions"
+
+## Engineering
+
+### ammonia-tower-design
+- Path: `skills/ammonia-tower-design`
+- Summary: Ammonia nitrogen stripping and absorption packed-tower design workflow for wastewater treatment. Includes tower diameter, packing height, packing comparison, wetting/circulation checks, Blackwell/Kister GPDC/Mackowiak SBD hydraulics, and Onda mass-transfer sizing. Python calculator with HG/T 3986-2016 and HG/T 4374-2012 packing data.
+- Primary file: `skills/ammonia-tower-design/SKILL.md`
+- Typical trigger: "氨氮吹脱塔设计", "填料塔计算", "ammonia tower design"
 
 ## Naming Rules
 

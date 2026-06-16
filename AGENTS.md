@@ -1,11 +1,11 @@
-﻿# Repository Guidelines
+# Repository Guidelines
 
 ## Project Structure & Module Organization
 This repository stores reusable agent skills and sync scripts.
 
 - `skills/<skill-name>/SKILL.md`: each skill’s primary specification.
 - Optional skill subfolders: `references/`, `scripts/`, `assets/`.
-- Do not add per-skill `README.md`; keep skill instructions in `SKILL.md` and supporting details in `references/`.
+- Do not add per-skill `README.md` unless the skill has complex setup or usage that benefits from a human-readable quickstart (e.g., `ammonia-tower-design`). Keep primary skill instructions in `SKILL.md`.
 - `scripts/install-skills.ps1`: main multi-runtime installer.
 - `scripts/targets.example.json`: template for runtime target paths.
 

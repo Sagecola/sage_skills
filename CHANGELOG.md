@@ -2,6 +2,12 @@
 
 All notable changes to this repository will be documented in this file.
 
+## 0.8.0 - 2026-06-16
+
+### Features
+- `daylog`: add skill for generating daily summaries and diary material from AI coding assistant conversation history and browser history
+- `ammonia-tower-design`: add ammonia nitrogen stripping and absorption packed-tower design workflow with Python calculator, HG/T packing data, and multiple hydraulic models
+
 ## 0.7.0 - 2026-05-22
 
 ### Features
