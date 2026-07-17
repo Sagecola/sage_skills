@@ -1,21 +1,99 @@
 """
 浏览器历史记录清洗+分类脚本
 
-读取 BrowserHistory.csv，按天生成干净的活动时间线。
+读取浏览器历史记录（CSV 或 fetch_browser_history.py 生成的 JSON），按天生成干净的活动时间线。
 输出：每天一个 Markdown 文件，按域名归类，过滤噪音。
 
 用法：
-    python process_history.py --input ..\History\BrowserHistory.csv --out output
-    python process_history.py --input ..\History\BrowserHistory.csv --start 2026-03-10 --end 2026-03-22 --out output
+    # 从 CSV 读取（旧方式）
+    python process_history.py --input History/BrowserHistory.csv --out output
+
+    # 从 JSON 读取（新方式，配合 fetch_browser_history.py）
+    python process_history.py --input browser-history.json --out output
+
+    # 自动获取 + 处理（一步到位）
+    python process_history.py --auto --start 2026-07-01 --end 2026-07-17 --out output
 """
 
 import csv
 import argparse
+import json
 import os
 import re
 from datetime import datetime, timezone, timedelta
 from collections import defaultdict
 from urllib.parse import urlparse, parse_qs, unquote
+from pathlib import Path
+
+
+# ── 数据源读取 ─────────────────────────────────────────────────────────
+
+def read_csv_history(input_file):
+    """读取 BrowserHistory.csv，返回统一格式记录列表"""
+    records = []
+    with open(input_file, "r", encoding="utf-8-sig") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            # 跳过重复表头行
+            if "DateTime" in row.get("NavigatedToUrl", ""):
+                continue
+            records.append({
+                "timestamp": row["DateTime"],
+                "url": row.get("NavigatedToUrl", ""),
+                "title": row.get("PageTitle", ""),
+                "browser": row.get("Browser", ""),
+            })
+    return records
+
+
+def read_json_history(input_file):
+    """读取 fetch_browser_history.py 生成的 JSON，返回统一格式记录列表"""
+    with open(input_file, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    records = []
+    for r in data.get("records", []):
+        if "error" in r:
+            continue
+        records.append({
+            "timestamp": r["timestamp"],
+            "url": r.get("url", ""),
+            "title": r.get("title", ""),
+            "browser": r.get("browser", ""),
+        })
+    return records
+
+
+def auto_fetch_history(start_date, end_date):
+    """自动调用 fetch_browser_history.py 获取浏览器历史"""
+    script_dir = Path(__file__).parent
+    fetch_script = script_dir / "fetch_browser_history.py"
+    if not fetch_script.exists():
+        print(f"⚠ 找不到 fetch_browser_history.py，跳过自动获取")
+        return []
+
+    import subprocess
+    import tempfile
+    tmp_json = Path(tempfile.mktemp(suffix=".json"))
+    try:
+        cmd = [
+            "python", str(fetch_script),
+            "--start", start_date,
+            "--end", end_date,
+            "--out", str(tmp_json),
+        ]
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+        if result.returncode != 0:
+            print(f"⚠ fetch_browser_history.py 执行失败: {result.stderr}")
+            return []
+        if result.stdout:
+            print(result.stdout)
+        return read_json_history(str(tmp_json))
+    except Exception as e:
+        print(f"⚠ 自动获取浏览器历史失败: {e}")
+        return []
+    finally:
+        if tmp_json.exists():
+            tmp_json.unlink()
 
 # ── 时区 ────────────────────────────────────────────────────────────
 BEIJING_TZ = timezone(timedelta(hours=8))
@@ -227,25 +305,28 @@ def is_generic_title(title):
 
 
 # ── 主逻辑 ────────────────────────────────────────────────────────────
-def process_history(input_file, start_date=None, end_date=None):
+def process_history(input_file=None, start_date=None, end_date=None, records=None):
     """
-    读取 CSV，返回按天分组的清洗后记录。
+    读取浏览器历史（CSV/JSON/自动获取），返回按天分组的清洗后记录。
     结果: { "2026-03-10": [ {datetime, url, title, category, label, search_query, cleaned_url}, ... ] }
     """
-    with open(input_file, "r", encoding="utf-8-sig") as f:
-        reader = csv.DictReader(f)
-        rows = list(reader)
-
-    # 有些 CSV 会重复出现表头行（数据追加导致），过滤掉
-    rows = [r for r in rows if "DateTime" not in r.get("NavigatedToUrl", "")]
+    # 读取数据源
+    if records is None:
+        if input_file is None:
+            raise ValueError("必须指定 --input 或 --auto")
+        ext = Path(input_file).suffix.lower()
+        if ext == ".json":
+            records = read_json_history(input_file)
+        else:
+            records = read_csv_history(input_file)
 
     daily = defaultdict(list)
-    stats = {"total": len(rows), "filtered": 0, "kept": 0}
+    stats = {"total": len(records), "filtered": 0, "kept": 0}
 
-    for row in rows:
-        dt_str = row["DateTime"]
-        url = row.get("NavigatedToUrl", "")
-        title = row.get("PageTitle", "")
+    for row in records:
+        dt_str = row["timestamp"]
+        url = row.get("url", "")
+        title = row.get("title", "")
 
         dt_beijing = parse_utc_to_beijing(dt_str)
         date_key = dt_beijing.strftime("%Y-%m-%d")
@@ -386,7 +467,8 @@ def get_default_outdir():
 # ── CLI ────────────────────────────────────────────────────────────────
 def main():
     parser = argparse.ArgumentParser(description="浏览器历史记录清洗+分类")
-    parser.add_argument("--input", "-i", required=True, help="BrowserHistory.csv 路径")
+    parser.add_argument("--input", "-i", default=None, help="BrowserHistory.csv 或 browser-history.json 路径")
+    parser.add_argument("--auto", "-a", action="store_true", help="自动从浏览器数据库获取历史记录")
     parser.add_argument("--out", "-o", default=None, help="输出目录（默认：当前工作目录）")
     parser.add_argument("--start", "-s", help="起始日期 YYYY-MM-DD")
     parser.add_argument("--end", "-e", help="结束日期 YYYY-MM-DD")
@@ -394,11 +476,18 @@ def main():
                         help="输出格式：full=完整, compact=紧凑时间线, both=两者都输出")
     args = parser.parse_args()
 
+    if not args.input and not args.auto:
+        parser.error("必须指定 --input 或 --auto")
+
     if args.out is None:
         args.out = get_default_outdir()
     os.makedirs(args.out, exist_ok=True)
 
-    daily, stats = process_history(args.input, args.start, args.end)
+    if args.auto:
+        records = auto_fetch_history(args.start, args.end)
+        daily, stats = process_history(start_date=args.start, end_date=args.end, records=records)
+    else:
+        daily, stats = process_history(args.input, args.start, args.end)
 
     print(f"总记录: {stats['total']}, 保留: {stats['kept']}, 过滤噪音: {stats['filtered']}")
 

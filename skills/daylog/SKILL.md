@@ -1,7 +1,7 @@
 ---
 name: daylog
 description: |
-  Generate readable daily summaries from local AI coding assistant conversation history and browser history. Triggers on: "查 AI 对话记录", "整理工作日志", "总结每天和 AI 干了什么", "上周用 AI 做了啥", "帮我看看我最近和 AI 聊了啥", "summarize my coding sessions", "generate work log", "what did I work on with AI", "写日记", "回忆今天干了什么", "帮我写日记素材", "diary material", or any request to review, summarize, or report on daily activities. Also triggers when migrating this workflow to another computer.
+  Generate readable daily summaries from local AI coding assistant conversation history and browser history. Triggers on: "查 AI 对话记录", "整理工作日志", "总结每天和 AI 干了什么", "上周用 AI 做了啥", "帮我看看我最近和 AI 聊了啥", "summarize my coding sessions", "generate work log", "what did I work on with AI", "写日记", "回忆今天干了什么", "帮我写日记素材", "diary material", "浏览记录", "browser history", or any request to review, summarize, or report on daily activities. Also triggers when migrating this workflow to another computer.
 ---
 
 # Daylog
@@ -12,14 +12,32 @@ description: |
 
 ## 支持的工具
 
-| 工具 | Windows 默认路径 |
-|------|-----------------|
-| Codex | `%USERPROFILE%\.codex\sessions` |
-| Claude Code | `%USERPROFILE%\.claude\projects` |
-| Kimi Code CLI | `%USERPROFILE%\.kimi\sessions` |
-| opencode | `%USERPROFILE%\.local\share\opencode\opencode.db` |
+| 工具 | Windows 默认路径 | 格式 |
+|------|-----------------|------|
+| Codex | `%USERPROFILE%\.codex\sessions` | JSONL |
+| Claude Code | `%USERPROFILE%\.claude\projects` | JSONL |
+| Kimi Code CLI (新版) | `%USERPROFILE%\.kimi-code\sessions` | JSONL |
+| Kimi Code CLI (旧版) | `%USERPROFILE%\.kimi\sessions` | JSONL |
+| OpenCode | `%USERPROFILE%\.local\share\opencode\opencode.db` | SQLite |
+| OpenClaw | `%USERPROFILE%\.openclaw\agents\main\sessions` | JSONL |
+| Hermes / MiMo Code | `%USERPROFILE%\.local\share\mimocode\mimocode.db` | SQLite |
+| Craft Agents | `%USERPROFILE%\.craft-agent\workspaces` | JSONL |
+| Reasonix | `%APPDATA%\reasonix\sessions` | JSONL |
+| Cursor | `%USERPROFILE%\.cursor\chats` | JSON |
+| Windsurf / Codeium | `%USERPROFILE%\.codeium\windsurf` | JSONL |
+| Cline | `%USERPROFILE%\.cline\tasks` | JSON |
+| Aider | 项目目录下 `.aider.chat.history.md` | Markdown |
 
-补充检查路径（有需要时）：`%APPDATA%\opencode`、`%LOCALAPPDATA%\opencode`
+## 支持的浏览器
+
+自动从本地浏览器数据库读取历史记录，无需手动导出 CSV：
+
+| 浏览器 | 数据库路径 |
+|--------|-----------|
+| Chrome | `AppData\Local\Google\Chrome\User Data\<Profile>\History` |
+| Edge | `AppData\Local\Microsoft\Edge\User Data\<Profile>\History` |
+| Zen Browser | `AppData\Roaming\zen\Profiles\<profile>\places.sqlite` |
+| Firefox | `AppData\Roaming\Mozilla\Firefox\Profiles\<profile>\places.sqlite` |
 
 ## 安全规则
 
@@ -50,7 +68,12 @@ python scripts\extract_ai_logs.py --start YYYY-MM-DD --end YYYY-MM-DD --source-r
 backup-root/
   codex/sessions/
   claude/projects/
+  kimi-code/sessions/
   kimi/sessions/
+  openclaw/agents/main/sessions/
+  mimocode/mimocode.db
+  craft-agent/workspaces/
+  reasonix/sessions/
   opencode/opencode.db
 ```
 
@@ -101,8 +124,11 @@ backup-root/
 # 1. 提取 AI 对话记录
 python scripts\extract_ai_logs.py --start YYYY-MM-DD --end YYYY-MM-DD --out ai-log-index.json
 
-# 2. 清洗浏览器历史
-python scripts\process_history.py -i <BrowserHistory.csv 路径> --start YYYY-MM-DD --end YYYY-MM-DD
+# 2. 自动获取浏览器历史（推荐，无需手动导出 CSV）
+python scripts\process_history.py --auto --start YYYY-MM-DD --end YYYY-MM-DD
+
+# 或者：从已有的 CSV/JSON 文件读取
+python scripts\process_history.py -i <BrowserHistory.csv 或 browser-history.json 路径> --start YYYY-MM-DD --end YYYY-MM-DD
 ```
 
 产出文件（默认在当前工作目录）：
@@ -157,7 +183,25 @@ python scripts\process_history.py -i <BrowserHistory.csv 路径> --start YYYY-MM
 
 ### 数据来源
 
-浏览器历史 CSV 文件（Chrome/Edge 导出），需由用户指定路径，例如：`--input C:\Users\<用户名>\Desktop\History\BrowserHistory.csv`
+**方式一（推荐）：自动获取**
+直接从浏览器 SQLite 数据库读取，无需手动导出：
+```powershell
+python scripts\process_history.py --auto --start YYYY-MM-DD --end YYYY-MM-DD
+```
+支持 Chrome、Edge、Zen Browser、Firefox。需要 `pip install browser-history`（可选）。
+
+**方式二：从 CSV 文件读取**
+浏览器历史 CSV 文件（Chrome/Edge 导出），需由用户指定路径：
+```powershell
+python scripts\process_history.py -i C:\Users\<用户名>\Desktop\History\BrowserHistory.csv --start YYYY-MM-DD --end YYYY-MM-DD
+```
+
+**方式三：从 JSON 文件读取**
+使用 `fetch_browser_history.py` 先获取，再处理：
+```powershell
+python scripts\fetch_browser_history.py --start YYYY-MM-DD --end YYYY-MM-DD --out browser-history.json
+python scripts\process_history.py -i browser-history.json --start YYYY-MM-DD --end YYYY-MM-DD
+```
 
 ### 处理脚本
 
@@ -190,8 +234,18 @@ python scripts\process_history.py -i <BrowserHistory.csv 路径> --start YYYY-MM
 
 - **Codex**：JSONL 文件，按 年/月/日 目录存放
 - **Claude Code**：`.claude/projects` 下的 JSONL 文件，跳过 `subagents/` 和 `tool-results/` 子目录
-- **Kimi Code CLI**：`~/.kimi/sessions/<hash>/<uuid>/wire.jsonl`，`TurnBegin` = 用户发言，`ContentPart` = AI 回复，`ToolCall` = 执行的命令
+- **Kimi Code CLI (新版)**：`~/.kimi-code/sessions/<hash>/<session_id>/agents/main/wire.jsonl`
+- **Kimi Code CLI (旧版)**：`~/.kimi/sessions/<hash>/<uuid>/wire.jsonl`
+  - `TurnBegin` = 用户发言，`ContentPart` = AI 回复，`ToolCall` = 执行的命令
 - **opencode**：SQLite 数据库，`message` 表 join `part` 表，文本在 `part.data` 的 `type=text` 记录里
+- **OpenClaw**：`~/.openclaw/agents/main/sessions/<UUID>.jsonl`，`type=message` 的记录包含对话内容
+- **Hermes / MiMo Code**：SQLite 数据库 `mimocode.db`，`session` 表 + `message` 表，支持 FTS5 全文搜索
+- **Craft Agents**：`~/.craft-agent/workspaces/<ws>/sessions/<dir>/session.jsonl`，`type=user/assistant/tool`
+- **Reasonix**：`AppData/Roaming/reasonix/sessions/` 或项目级 `<project>/sessions/`，JSONL 格式
+- **Cursor**：`~/.cursor/chats/*.json`，JSON 格式，`role` 字段区分用户/助手
+- **Windsurf / Codeium**：`~/.codeium/windsurf/` 下的 JSONL 文件
+- **Cline**：`~/.cline/tasks/<task-id>/ui_messages.json`，JSON 数组格式
+- **Aider**：项目目录下 `.aider.chat.history.md`，Markdown 格式，`##` 标题分隔对话轮次
 - 日期分组用消息时间戳（转换为北京时间），不用文件名
 - 跨午夜的会话：按第一条用户可见消息归到当天
-- **浏览器历史**：CSV 格式（DateTime, NavigatedToUrl, PageTitle），UTC 时间自动转北京时间
+- **浏览器历史**：自动读取 SQLite 数据库（Chrome/Edge/Firefox/Zen），时间戳自动转换为北京时间

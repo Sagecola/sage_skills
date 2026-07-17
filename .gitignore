@@ -15,3 +15,6 @@ scripts/targets.json
 
 # Local Claude runtime config
 .claude/settings.local.json
+
+# FreeFileSync sync database
+sync.ffs_db

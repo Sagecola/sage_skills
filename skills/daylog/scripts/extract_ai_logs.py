@@ -29,6 +29,10 @@ def parse_args():
     parser.add_argument("--claude-projects", help="Override Claude Code projects directory.")
     parser.add_argument("--opencode-db", help="Override opencode SQLite database path.")
     parser.add_argument("--kimi-sessions", help="Override Kimi Code CLI sessions directory.")
+    parser.add_argument("--openclaw-sessions", help="Override OpenClaw sessions directory.")
+    parser.add_argument("--mimocode-db", help="Override MiMo Code database path.")
+    parser.add_argument("--craft-agents-dir", help="Override Craft Agents workspaces directory.")
+    parser.add_argument("--reasonix-sessions", help="Override Reasonix sessions directory.")
     return parser.parse_args()
 
 
@@ -267,23 +271,26 @@ def parse_opencode(db_path, start_utc, end_utc, tz):
 
 
 def parse_kimi(root, start_utc, end_utc, tz):
-    """Parse Kimi Code CLI history from ~/.kimi/sessions/."""
+    """Parse Kimi Code CLI history from ~/.kimi/sessions/ or ~/.kimi-code/sessions/."""
     root = Path(root)
     if not root.exists():
         return []
     records = []
 
-    # Each session hash dir contains subdirs (UUIDs) with context.jsonl + wire.jsonl + state.json
+    # New version (kimi-code): sessions/<hash>/<session_id>/agents/main/wire.jsonl
+    # Old version (kimi-cli): sessions/<hash>/<uuid>/wire.jsonl
     for session_dir in sorted(root.iterdir()):
         if not session_dir.is_dir():
             continue
-        session_hash = session_dir.name
 
         for sub_dir in sorted(session_dir.iterdir()):
             if not sub_dir.is_dir():
                 continue
 
-            wire_path = sub_dir / "wire.jsonl"
+            # Try new path first, then old path
+            wire_path = sub_dir / "agents" / "main" / "wire.jsonl"
+            if not wire_path.exists():
+                wire_path = sub_dir / "wire.jsonl"
             if not wire_path.exists():
                 continue
 
@@ -337,6 +344,459 @@ def parse_kimi(root, start_utc, end_utc, tz):
     return records
 
 
+def parse_openclaw(root, start_utc, end_utc, tz):
+    """Parse OpenClaw history from ~/.openclaw/agents/main/sessions/."""
+    root = Path(root)
+    if not root.exists():
+        return []
+    records = []
+
+    for jsonl_path in sorted(root.glob("*.jsonl")):
+        messages = []
+        commands = []
+        first_ts = None
+        session_id = jsonl_path.stem
+
+        for obj in read_jsonl(jsonl_path):
+            typ = obj.get("type")
+            ts = parse_time(obj.get("timestamp") or obj.get("created_at"))
+            if ts and first_ts is None:
+                first_ts = ts
+
+            if typ == "message":
+                role = obj.get("role", "")
+                content = obj.get("content", "")
+                text = text_from_content(content)
+                if text and not is_noise(text):
+                    messages.append({"role": role, "text": clip(text)})
+            elif typ == "session":
+                # Session metadata
+                session_id = obj.get("id", session_id)
+
+        if in_range(first_ts, start_utc, end_utc):
+            records.append(make_record(
+                "openclaw",
+                first_ts,
+                tz,
+                session_id,
+                None,
+                jsonl_path,
+                messages,
+                commands,
+            ))
+
+    return records
+
+
+def parse_mimocode(db_path, start_utc, end_utc, tz):
+    """Parse MiMo Code (Hermes) history from ~/.local/share/mimocode/mimocode.db."""
+    db_path = Path(db_path)
+    if not db_path.exists():
+        return [], {}
+    details = {}
+    records = []
+    try:
+        conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+        conn.row_factory = sqlite3.Row
+        tables = sqlite_tables(conn)
+
+        if "message" not in tables:
+            conn.close()
+            return [], {"tables": tables}
+
+        # Get session info
+        sessions = {}
+        if "session" in tables:
+            for row in conn.execute("select * from session").fetchall():
+                data = dict(row)
+                sessions[str(data.get("id", ""))] = data
+
+        # Get messages grouped by session
+        by_session = {}
+        for row in conn.execute("""
+            SELECT * FROM message
+            WHERE time_created >= ? AND time_created <= ?
+            ORDER BY time_created
+        """, (start_utc.timestamp(), end_utc.timestamp())).fetchall():
+            data = dict(row)
+            ts = parse_time(data.get("time_created"))
+            if not in_range(ts, start_utc, end_utc):
+                continue
+            sid = str(data.get("session_id", "unknown"))
+            role = str(data.get("role", ""))
+            text = clip(data.get("content", "") or "")
+            item = by_session.setdefault(sid, {"first": ts, "messages": [], "commands": []})
+            item["first"] = min(item["first"], ts)
+            if text and not is_noise(text):
+                item["messages"].append({"role": role, "text": text})
+
+        for sid, item in by_session.items():
+            meta = sessions.get(sid, {})
+            records.append(make_record(
+                "mimocode",
+                item["first"],
+                tz,
+                sid,
+                meta.get("cwd") or meta.get("project"),
+                db_path,
+                item["messages"],
+                item["commands"],
+            ))
+
+        conn.close()
+    except Exception as exc:
+        details["parse_error"] = str(exc)
+    return records, details
+
+
+def parse_craft_agents(root, start_utc, end_utc, tz):
+    """Parse Craft Agents history from ~/.craft-agent/workspaces/."""
+    root = Path(root)
+    if not root.exists():
+        return []
+    records = []
+
+    # Scan all workspaces for session directories
+    for ws_dir in root.iterdir():
+        if not ws_dir.is_dir():
+            continue
+        sessions_dir = ws_dir / "sessions"
+        if not sessions_dir.exists():
+            continue
+
+        for session_dir in sorted(sessions_dir.iterdir()):
+            if not session_dir.is_dir():
+                continue
+
+            session_jsonl = session_dir / "session.jsonl"
+            if not session_jsonl.exists():
+                continue
+
+            messages = []
+            commands = []
+            first_ts = None
+            session_id = session_dir.name
+
+            for obj in read_jsonl(session_jsonl):
+                ts = parse_time(obj.get("timestamp") or obj.get("created_at"))
+                if ts and first_ts is None:
+                    first_ts = ts
+
+                typ = obj.get("type")
+                if typ == "user":
+                    text = text_from_content(obj.get("content") or obj.get("message"))
+                    if text and not is_noise(text):
+                        messages.append({"role": "user", "text": clip(text)})
+                elif typ == "assistant":
+                    text = text_from_content(obj.get("content") or obj.get("message"))
+                    if text and not is_noise(text):
+                        messages.append({"role": "assistant", "text": clip(text)})
+                elif typ == "tool":
+                    name = obj.get("name", "")
+                    args_text = obj.get("arguments", "")
+                    commands.append(clip(f"{name}: {args_text}", 500))
+
+            if in_range(first_ts, start_utc, end_utc):
+                records.append(make_record(
+                    "craft-agents",
+                    first_ts,
+                    tz,
+                    session_id,
+                    str(ws_dir),
+                    session_jsonl,
+                    messages,
+                    commands,
+                ))
+
+    return records
+
+
+def parse_reasonix(root, start_utc, end_utc, tz):
+    """Parse Reasonix history from AppData/Roaming/reasonix/sessions/."""
+    root = Path(root)
+    if not root.exists():
+        return []
+    records = []
+
+    # Also check project-specific sessions
+    parent = root.parent
+    if parent.exists():
+        for item in parent.iterdir():
+            if item.is_dir() and item.name != "sessions":
+                proj_sessions = item / "sessions"
+                if proj_sessions.exists():
+                    records.extend(_parse_reasonix_dir(proj_sessions, start_utc, end_utc, tz))
+
+    records.extend(_parse_reasonix_dir(root, start_utc, end_utc, tz))
+    return records
+
+
+def _parse_reasonix_dir(sessions_dir, start_utc, end_utc, tz):
+    """Parse a Reasonix sessions directory."""
+    records = []
+    for session_dir in sorted(sessions_dir.iterdir()):
+        if not session_dir.is_dir():
+            continue
+
+        # Find .jsonl files in session directory
+        jsonl_files = list(session_dir.glob("*.jsonl"))
+        if not jsonl_files:
+            continue
+
+        messages = []
+        commands = []
+        first_ts = None
+        session_id = session_dir.name
+
+        for jsonl_path in jsonl_files:
+            for obj in read_jsonl(jsonl_path):
+                ts = parse_time(obj.get("timestamp") or obj.get("created_at"))
+                if ts and first_ts is None:
+                    first_ts = ts
+
+                role = obj.get("role", "")
+                content = obj.get("content", "") or obj.get("message", "")
+                text = text_from_content(content)
+                if text and not is_noise(text):
+                    if role in ("user", "assistant"):
+                        messages.append({"role": role, "text": clip(text)})
+
+                # Tool calls
+                if obj.get("type") == "tool_use":
+                    name = obj.get("name", "")
+                    args_text = obj.get("arguments", "")
+                    commands.append(clip(f"{name}: {args_text}", 500))
+
+        if in_range(first_ts, start_utc, end_utc):
+            records.append(make_record(
+                "reasonix",
+                first_ts,
+                tz,
+                session_id,
+                None,
+                session_dir,
+                messages,
+                commands,
+            ))
+
+    return records
+
+
+def parse_cursor(root, start_utc, end_utc, tz):
+    """Parse Cursor history from ~/.cursor/chats/."""
+    root = Path(root)
+    if not root.exists():
+        return []
+    records = []
+
+    for json_path in sorted(root.glob("*.json")):
+        messages = []
+        commands = []
+        first_ts = None
+        session_id = json_path.stem
+
+        try:
+            with json_path.open("r", encoding="utf-8", errors="replace") as f:
+                data = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            continue
+
+        # Cursor chats can be a list of messages or a dict with messages
+        msg_list = data if isinstance(data, list) else data.get("messages", [])
+        for msg in msg_list:
+            ts = parse_time(msg.get("timestamp") or msg.get("createdAt"))
+            if ts and first_ts is None:
+                first_ts = ts
+
+            role = msg.get("role", "")
+            text = text_from_content(msg.get("content") or msg.get("message"))
+            if text and not is_noise(text) and role in ("user", "assistant"):
+                messages.append({"role": role, "text": clip(text)})
+
+        if in_range(first_ts, start_utc, end_utc):
+            records.append(make_record(
+                "cursor",
+                first_ts,
+                tz,
+                session_id,
+                None,
+                json_path,
+                messages,
+                commands,
+            ))
+
+    return records
+
+
+def parse_windsurf(root, start_utc, end_utc, tz):
+    """Parse Windsurf/Codeium history from ~/.codeium/windsurf/ or ~/.codeium/cascade/."""
+    root = Path(root)
+    if not root.exists():
+        return []
+    records = []
+
+    # Windsurf stores conversations in various subdirs
+    for jsonl_path in sorted(root.rglob("*.jsonl")):
+        messages = []
+        commands = []
+        first_ts = None
+        session_id = jsonl_path.stem
+
+        for obj in read_jsonl(jsonl_path):
+            ts = parse_time(obj.get("timestamp") or obj.get("createdAt"))
+            if ts and first_ts is None:
+                first_ts = ts
+
+            role = obj.get("role", "")
+            text = text_from_content(obj.get("content") or obj.get("message"))
+            if text and not is_noise(text) and role in ("user", "assistant"):
+                messages.append({"role": role, "text": clip(text)})
+
+            if obj.get("type") == "tool_use":
+                name = obj.get("name", "")
+                args_text = obj.get("arguments", "")
+                commands.append(clip(f"{name}: {args_text}", 500))
+
+        if in_range(first_ts, start_utc, end_utc) and messages:
+            records.append(make_record(
+                "windsurf",
+                first_ts,
+                tz,
+                session_id,
+                None,
+                jsonl_path,
+                messages,
+                commands,
+            ))
+
+    return records
+
+
+def parse_cline(root, start_utc, end_utc, tz):
+    """Parse Cline history from ~/.cline/tasks/."""
+    root = Path(root)
+    if not root.exists():
+        return []
+    records = []
+
+    for task_dir in sorted(root.iterdir()):
+        if not task_dir.is_dir():
+            continue
+
+        # Cline stores messages in ui_messages.json
+        ui_messages_path = task_dir / "ui_messages.json"
+        if not ui_messages_path.exists():
+            continue
+
+        messages = []
+        commands = []
+        first_ts = None
+        session_id = task_dir.name
+
+        try:
+            with ui_messages_path.open("r", encoding="utf-8", errors="replace") as f:
+                data = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            continue
+
+        msg_list = data if isinstance(data, list) else []
+        for msg in msg_list:
+            ts = parse_time(msg.get("timestamp") or msg.get("ts"))
+            if ts and first_ts is None:
+                first_ts = ts
+
+            role = msg.get("role", "")
+            text = text_from_content(msg.get("content") or msg.get("message") or msg.get("text"))
+            if text and not is_noise(text) and role in ("user", "assistant"):
+                messages.append({"role": role, "text": clip(text)})
+
+        if in_range(first_ts, start_utc, end_utc) and messages:
+            records.append(make_record(
+                "cline",
+                first_ts,
+                tz,
+                session_id,
+                None,
+                ui_messages_path,
+                messages,
+                commands,
+            ))
+
+    return records
+
+
+def parse_aider(root, start_utc, end_utc, tz):
+    """Parse Aider chat history from project-level .aider.chat.history.md files."""
+    home = Path.home()
+    records = []
+
+    # Search common locations for .aider.chat.history.md
+    search_dirs = [home / "Documents", home / "Desktop", home / "projects", home / "repos", home / "code"]
+    for search_dir in search_dirs:
+        if not search_dir.exists():
+            continue
+        for history_path in search_dir.rglob(".aider.chat.history.md"):
+            _parse_aider_file(history_path, start_utc, end_utc, tz, records)
+
+    return records
+
+
+def _parse_aider_file(history_path, start_utc, end_utc, tz, records):
+    """Parse a single Aider chat history markdown file."""
+    try:
+        content = history_path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return
+
+    # Aider uses markdown format with ## headers for turns
+    messages = []
+    commands = []
+    first_ts = None
+    current_role = None
+    current_text = []
+
+    for line in content.split("\n"):
+        if line.startswith("## "):
+            # Save previous message
+            if current_role and current_text:
+                text = "\n".join(current_text).strip()
+                if text and not is_noise(text):
+                    messages.append({"role": current_role, "text": clip(text)})
+
+            # Parse new header: ## user 2026-01-15 10:30:00 or ## assistant
+            header = line[3:].strip()
+            parts = header.split()
+            if len(parts) >= 1:
+                current_role = parts[0].lower()
+                if current_role not in ("user", "assistant"):
+                    current_role = None
+                if len(parts) >= 2:
+                    ts = parse_time(parts[1])
+                    if ts and first_ts is None:
+                        first_ts = ts
+            current_text = []
+        elif current_role:
+            current_text.append(line)
+
+    # Don't forget the last message
+    if current_role and current_text:
+        text = "\n".join(current_text).strip()
+        if text and not is_noise(text):
+            messages.append({"role": current_role, "text": clip(text)})
+
+    if in_range(first_ts, start_utc, end_utc) and messages:
+        records.append(make_record(
+            "aider",
+            first_ts,
+            tz,
+            history_path.parent.name,
+            str(history_path.parent),
+            history_path,
+            messages,
+            commands,
+        ))
+
+
 def resolve_sources(args):
     home = Path.home()
     if args.source_root:
@@ -346,12 +806,28 @@ def resolve_sources(args):
             "claude_code": Path(args.claude_projects) if args.claude_projects else source / "claude" / "projects",
             "opencode": Path(args.opencode_db) if args.opencode_db else source / "opencode" / "opencode.db",
             "kimi_code": Path(args.kimi_sessions) if args.kimi_sessions else source / "kimi" / "sessions",
+            "openclaw": Path(args.openclaw_sessions) if args.openclaw_sessions else source / "openclaw" / "agents" / "main" / "sessions",
+            "mimocode": Path(args.mimocode_db) if args.mimocode_db else source / "mimocode" / "mimocode.db",
+            "craft_agents": Path(args.craft_agents_dir) if args.craft_agents_dir else source / "craft-agent" / "workspaces",
+            "reasonix": Path(args.reasonix_sessions) if args.reasonix_sessions else source / "reasonix" / "sessions",
+            "cursor": source / "cursor" / "chats",
+            "windsurf": source / "codeium" / "windsurf",
+            "cline": source / "cline" / "tasks",
+            "aider": home,
         }
     return {
         "codex": Path(args.codex_sessions) if args.codex_sessions else home / ".codex" / "sessions",
         "claude_code": Path(args.claude_projects) if args.claude_projects else home / ".claude" / "projects",
         "opencode": Path(args.opencode_db) if args.opencode_db else home / ".local" / "share" / "opencode" / "opencode.db",
-        "kimi_code": Path(args.kimi_sessions) if args.kimi_sessions else home / ".kimi" / "sessions",
+        "kimi_code": Path(args.kimi_sessions) if args.kimi_sessions else home / ".kimi-code" / "sessions",
+        "openclaw": Path(args.openclaw_sessions) if args.openclaw_sessions else home / ".openclaw" / "agents" / "main" / "sessions",
+        "mimocode": Path(args.mimocode_db) if args.mimocode_db else home / ".local" / "share" / "mimocode" / "mimocode.db",
+        "craft_agents": Path(args.craft_agents_dir) if args.craft_agents_dir else home / ".craft-agent" / "workspaces",
+        "reasonix": Path(args.reasonix_sessions) if args.reasonix_sessions else Path.home() / "AppData" / "Roaming" / "reasonix" / "sessions",
+        "cursor": home / ".cursor" / "chats",
+        "windsurf": home / ".codeium" / "windsurf",
+        "cline": home / ".cline" / "tasks",
+        "aider": home,
     }
 
 
@@ -363,7 +839,18 @@ def main():
     claude = parse_claude(sources["claude_code"], start_utc, end_utc, tz)
     opencode, opencode_schema = parse_opencode(sources["opencode"], start_utc, end_utc, tz)
     kimi = parse_kimi(sources["kimi_code"], start_utc, end_utc, tz)
-    records = sorted(codex + claude + opencode + kimi, key=lambda r: (r["date"], r["tool"], r["timestamp"]))
+    openclaw = parse_openclaw(sources["openclaw"], start_utc, end_utc, tz)
+    mimocode, mimocode_schema = parse_mimocode(sources["mimocode"], start_utc, end_utc, tz)
+    craft = parse_craft_agents(sources["craft_agents"], start_utc, end_utc, tz)
+    reasonix = parse_reasonix(sources["reasonix"], start_utc, end_utc, tz)
+    cursor = parse_cursor(sources["cursor"], start_utc, end_utc, tz)
+    windsurf = parse_windsurf(sources["windsurf"], start_utc, end_utc, tz)
+    cline = parse_cline(sources["cline"], start_utc, end_utc, tz)
+    aider = parse_aider(sources["aider"], start_utc, end_utc, tz)
+    records = sorted(
+        codex + claude + opencode + kimi + openclaw + mimocode + craft + reasonix + cursor + windsurf + cline + aider,
+        key=lambda r: (r["date"], r["tool"], r["timestamp"]),
+    )
     output = {
         "range": {
             "start": args.start,
@@ -376,14 +863,19 @@ def main():
         "sources": {key: str(value) for key, value in sources.items()},
         "source_exists": {key: Path(value).exists() for key, value in sources.items()},
         "opencode_schema": opencode_schema,
+        "mimocode_schema": mimocode_schema,
         "records": records,
     }
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"wrote {out_path} with {len(records)} records")
-    for tool in ("codex", "claude-code", "opencode", "kimi-code"):
-        print(tool, sum(1 for r in records if r["tool"] == tool))
+    for tool in ("codex", "claude-code", "opencode", "kimi-code", "openclaw", "mimocode", "craft-agents", "reasonix", "cursor", "windsurf", "cline", "aider"):
+        count = sum(1 for r in records if r["tool"] == tool)
+        if count > 0:
+            print(f"  {tool}: {count}")
+        else:
+            print(f"  {tool}: 0 (未找到记录)")
 
 
 if __name__ == "__main__":
