@@ -23,6 +23,7 @@
 - `obsidian-note`：生成带有规范 YAML frontmatter 的 Obsidian 笔记，支持影视、书籍、人际、播客、代码、报告、通用共 7 种笔记类型。
 - `daylog`：从 AI 编程助手对话记录（Codex、Claude Code、Kimi Code、opencode）和浏览器历史生成可读的每日摘要和日记素材。输出叙事风格的工作日志或日记草稿。
 - `file-organizer`：个人文件整理助手，帮助命名、分类并安全归档杂乱文件到「人生档案馆」系统。安全优先的工作流：先看后动，确认再操作。
+- `wiz-agent`：AI 驱动的磁盘空间分析与智能清理工具。使用 WizTree 极速扫描，生成详细空间报告，提供安全的清理命令（开发缓存、系统临时文件等）。
 - `ammonia-tower-design`：氨氮废水两段式吹脱+吸收填料塔工程计算。包含塔径、填料高度、填料对比、润湿/循环校核、Onda 传质计算，内置 HG/T 3986-2016 和 HG/T 4374-2012 填料数据。
 
 ## 目录结构
@@ -89,6 +90,11 @@ Copy-Item ./scripts/targets.example.json ./scripts/targets.json
 安装文件整理技能：
 ```powershell
 ./scripts/install-skills.ps1 -SkillName file-organizer
+```
+
+安装磁盘分析技能：
+```powershell
+./scripts/install-skills.ps1 -SkillName wiz-agent
 ```
 
 安装工程计算技能：

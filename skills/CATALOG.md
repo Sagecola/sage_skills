@@ -40,6 +40,12 @@ This catalog groups skills by purpose while keeping installation compatible with
 - Primary file: `skills/file-organizer/SKILL.md`
 - Typical trigger: "帮我整理文件", "这个文件放哪", "Downloads 好乱", "帮我分类", "按规则重命名"
 
+### wiz-agent
+- Path: `skills/wiz-agent`
+- Summary: AI-driven disk space analysis and intelligent cleanup for Windows. Scans drives with WizTree, generates space reports with top files and directory breakdowns, identifies common space hogs (dev caches, system temp, WSL), and executes safe cleanup commands from a built-in runbook.
+- Primary file: `skills/wiz-agent/SKILL.md`
+- Typical trigger: "分析磁盘空间", "C盘满了", "清理磁盘", "什么占了这么多空间", "disk space analysis"
+
 ### daylog
 - Path: `skills/daylog`
 - Summary: Generate readable daily summaries and diary material from local AI coding assistant conversation history and browser history. Extracts raw logs from Codex, Claude Code, Kimi Code CLI, and opencode, then writes narrative summaries. Supports migration from backup data on another computer.

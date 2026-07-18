@@ -21,6 +21,13 @@ from process_history import process_history, CATEGORY_EMOJI, DOMAIN_RULES, get_d
 
 BEIJING_TZ = timezone(timedelta(hours=8))
 
+
+def format_date_nice(iso_date):
+    """'2026-05-26' → '2026.5.26'"""
+    parts = iso_date.split("-")
+    return f"{int(parts[0])}.{int(parts[1])}.{int(parts[2])}"
+
+
 # ── 域名 → 中文名映射 ────────────────────────────────────────────────
 DOMAIN_CN = {}
 for keyword, category, label in DOMAIN_RULES:
@@ -410,7 +417,7 @@ def generate_day(date, history_records, ai_records):
     blocks = group_by_site(history_records, ai_records)
 
     lines = []
-    lines.append(f"## {date}\n")
+    lines.append(f"## {format_date_nice(date)}\n")
 
     if not blocks:
         lines.append("（无数据）\n")

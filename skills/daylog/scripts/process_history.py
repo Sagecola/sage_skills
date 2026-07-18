@@ -386,6 +386,12 @@ def process_history(input_file=None, start_date=None, end_date=None, records=Non
     return dict(daily), stats
 
 
+def format_date_nice(iso_date):
+    """'2026-05-26' → '2026.5.26'"""
+    parts = iso_date.split("-")
+    return f"{int(parts[0])}.{int(parts[1])}.{int(parts[2])}"
+
+
 # ── 输出格式 ────────────────────────────────────────────────────────────
 CATEGORY_ORDER = ["dev", "ai", "reading", "video", "social", "shopping", "music", "food", "map", "tool", "other"]
 CATEGORY_EMOJI = {
@@ -398,7 +404,7 @@ CATEGORY_EMOJI = {
 def format_daily_markdown(date, records):
     """将一天的记录格式化为 Markdown"""
     lines = []
-    lines.append(f"# 浏览活动 - {date}\n")
+    lines.append(f"# 浏览活动 - {format_date_nice(date)}\n")
     lines.append(f"共 {len(records)} 条有效记录\n")
 
     # 按类别分组
@@ -429,7 +435,7 @@ def format_daily_markdown(date, records):
 
 def format_compact_timeline(date, records):
     """紧凑时间线格式（适合合并到日记素材）"""
-    lines = [f"## 📅 {date} 浏览器时间线\n"]
+    lines = [f"## 📅 {format_date_nice(date)} 浏览器时间线\n"]
 
     current_hour = None
     for r in records:

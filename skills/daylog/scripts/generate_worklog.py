@@ -30,6 +30,12 @@ def parse_args():
     return parser.parse_args()
 
 
+def format_date_nice(iso_date):
+    """'2026-05-26' → '2026.5.26'"""
+    parts = iso_date.split("-")
+    return f"{int(parts[0])}.{int(parts[1])}.{int(parts[2])}"
+
+
 def clean_text(text):
     text = " ".join(str(text).split())
     return text
@@ -118,7 +124,7 @@ def main():
     start = data.get("range", {}).get("start", "")
     end = data.get("range", {}).get("end", "")
     timezone = data.get("range", {}).get("timezone", "Asia/Shanghai")
-    lines.append(f"# {start} 至 {end} AI 协作工作日志")
+    lines.append(f"# {format_date_nice(start)} 至 {format_date_nice(end)} AI 协作工作日志")
     lines.append("")
     lines.append(f"生成时间：{dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     lines.append(f"分组时区：{timezone}")
@@ -137,7 +143,7 @@ def main():
         records_for_day = by_date.get(day, [])
         if not records_for_day and not args.include_empty:
             continue
-        lines.append(f"## {day}")
+        lines.append(f"## {format_date_nice(day)}")
         lines.append("")
         if not records_for_day:
             lines.append("- 未检测到会话记录。")
