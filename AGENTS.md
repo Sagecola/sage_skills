@@ -3,7 +3,7 @@
 ## Project Structure & Module Organization
 This repository stores reusable agent skills and sync scripts.
 
-- `skills/<skill-name>/SKILL.md`: each skill’s primary specification.
+- `skills/<skill-name>/SKILL.md`: each skill's primary specification.
 - Optional skill subfolders: `references/`, `scripts/`, `assets/`.
 - Do not add per-skill `README.md` unless the skill has complex setup or usage that benefits from a human-readable quickstart (e.g., `ammonia-tower-design`). Keep primary skill instructions in `SKILL.md`.
 - `scripts/install-skills.ps1`: main multi-runtime installer.
@@ -39,6 +39,32 @@ There is currently no formal test framework. Validate changes with:
 3. Regression check by installing `-All` after adding or renaming skills.
 
 When adding complex script logic, include a repeatable verification snippet in the PR description.
+
+## Skills with Python Scripts
+
+Three skills ship Python scripts under `skills/<name>/scripts/`:
+
+### ammonia-tower-design
+Ammonia nitrogen stripping and absorption packed-tower calculator.
+- `calculate_two_stage_ammonia_towers.py` — CLI entry point (`python -m scripts.calculate_two_stage_ammonia_towers --preset hanglian`)
+- `flooding_models.py` — Blackwell, Kister GPDC, Mackowiak SBD, Billet-Schultes
+- `pressure_drop_models.py`, `packing_data.py`, `report_formatter.py`
+- Do not edit unless the user explicitly asks.
+
+### daylog
+AI conversation history extractor and diary material generator.
+- `extract_ai_logs.py` — Extracts logs from Codex, Claude Code, Kimi, opencode, etc.
+- `generate_worklog.py` — Generates Markdown worklog from extracted index
+- `process_history.py` — Cleans and classifies browser history
+- `generate_diary_material.py` — Merges AI + browser data into diary drafts
+- Date format in output headings: `YYYY.M.D` (no leading zeros, dot-separated)
+- Intermediate files (`ai-log-index.json`, `timeline_*.md`) are kept in the working directory by default
+
+### wiz-agent
+Windows disk space analyzer using WizTree CLI.
+- `live_analysis.py` — Scans drives, generates Markdown space reports
+- Requires WizTree installed by user (via PATH or `--wiztree-path`)
+- `references/cleanup-runbook.md` — Safe cleanup command recipes
 
 ## Commit & Pull Request Guidelines
 Current history uses short, imperative commit messages (including Chinese), e.g., `修正 README.md 中的 Sagecola 链接格式`.
